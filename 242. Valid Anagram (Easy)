@@ -1,0 +1,24 @@
+# https://leetcode.com/problems/valid-anagram/
+
+# Solution #1. O(n) / O(1)
+from collections import Counter
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)
+ 
+
+
+# Solution #2. O(n) / O(1)
+from collections import defaultdict
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        seen = defaultdict(int)
+        
+        for ss in s:
+            seen[ss] += 1       
+            
+        for tt in t:  
+            seen[tt] -= 1
+        
+        return not any(seen.values())
