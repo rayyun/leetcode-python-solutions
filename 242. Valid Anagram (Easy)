@@ -1,24 +1,54 @@
 # https://leetcode.com/problems/valid-anagram/
 
-# Solution #1. O(n) / O(1)
+# Solution #1 : Sorting
+# O(n log n) / O(1)
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return sorted(s) == sorted(t)
+        
+
+# Solution #2 : collections.Counter
+# O(n) / O(1)
 from collections import Counter
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         return Counter(s) == Counter(t)
- 
+    
 
 
-# Solution #2. O(n) / O(1)
+# Solution #3 : collections.defaultdict
+# O(n) / O(1)
 from collections import defaultdict
-
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
         seen = defaultdict(int)
         
         for ss in s:
-            seen[ss] += 1       
+            seen[ss] += 1
             
-        for tt in t:  
+        for tt in t:
             seen[tt] -= 1
+        
+        return not any(seen.values())
+
+
+    
+# Solution #4 : dict (Hash)
+# O(n) / O(1)
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        seen = dict()
+        
+        for ss in s:
+            if ss in seen:
+                seen[ss] += 1
+            else:
+                seen[ss] = 1
+            
+        for tt in t:
+            if tt in seen:
+                seen[tt] -= 1
+            else:
+                seen[tt] = -1
         
         return not any(seen.values())
