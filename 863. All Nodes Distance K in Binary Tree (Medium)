@@ -1,0 +1,51 @@
+# https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
+
+# O(n) / O(n)
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+from collections import deque
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        parents = dict()
+
+        def getParents(node, parent):
+            nonlocal parents
+            
+            if not node:
+                return 
+            
+            parents[node.val] = parent
+            getParents(node.left, node)
+            getParents(node.right, node)
+            
+        
+        def bfs(start):
+            res = []
+            queue = deque([(start, 0)])
+            visited = set()
+            
+            while queue:
+                node, distance = queue.popleft()
+                
+                if node not in visited:
+                    if distance == k:
+                        res.append(node.val)
+                    visited.add(node)
+                    
+                    if node.left:
+                        queue.append([node.left, distance + 1])
+                    if node.right:
+                        queue.append([node.right, distance + 1])
+                    if parents[node.val]:
+                        queue.append([parents[node.val], distance + 1])
+                        
+            return res
+                        
+                        
+        getParents(root, None)
+        return bfs(target)
