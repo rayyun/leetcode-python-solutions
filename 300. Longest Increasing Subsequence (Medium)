@@ -1,0 +1,14 @@
+# O(n log n) / O(n)
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        longest = []
+        
+        for num in nums:
+            index = bisect_left(longest, num)
+            
+            if index < len(longest):
+                longest[index] = num
+            else:
+                longest.append(num)
+                
+        return len(longest)
