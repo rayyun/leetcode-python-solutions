@@ -6,7 +6,7 @@ class Solution:
         longest = []
         
         for num in nums:
-            index = bisect_left(longest, num)
+            index = bisect.bisect_left(longest, num)
             
             if index < len(longest):
                 longest[index] = num
