@@ -1,0 +1,12 @@
+# https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/
+
+# O(n log n) / O(n)
+class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        n_dict = dict()
+        
+        for i, num in enumerate(sorted(nums)):
+            if num not in n_dict:
+                n_dict[num] = i
+                
+        return [n_dict[num] for num in nums]
