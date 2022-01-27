@@ -1,0 +1,46 @@
+# https://leetcode.com/problems/path-sum/
+
+# Solution #1 - Recursion
+# O(n) / O(n)
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        def dfs(node, partSum):
+            if not node:
+                return
+            
+            partSum += node.val
+            
+            if not node.left and not node.right:
+                return partSum == targetSum
+            else:
+                return dfs(node.left, partSum) or dfs(node.right, partSum)
+            
+            
+        if not root:
+            return False
+        
+        return dfs(root, 0)
+        
+        
+# Solution #2 - Iterative
+# O(n) / O(n)
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        
+        stack = [(root, root.val)]
+        
+        while stack:
+            node, partSum = stack.pop()
+            
+            if not node.left and not node.right and partSum == targetSum:
+                return True
+            
+            if node.left:
+                stack.append((node.left, partSum + node.left.val))
+            
+            if node.right:
+                stack.append((node.right, partSum + node.right.val))
+                
+        return False
