@@ -1,0 +1,49 @@
+# https://leetcode.com/problems/range-sum-of-bst/
+
+# Solution #1 - Recursion
+# O(n) / O(n)
+class Solution:
+    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        def dfs(node):
+            if not node:
+                return
+            
+            if low <= node.val <= high:
+                self.rangeSum += node.val
+            
+            if low < node.val:
+                dfs(node.left)
+                
+            if node.val < high:
+                dfs(node.right)
+                
+        self.rangeSum = 0
+        dfs(root)
+        
+        return self.rangeSum
+        
+        
+# Solution #2 - Iterative
+# O(n) / O(n)
+class Solution:
+    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
+        if not root:
+            return 0
+        
+        stack = [root]
+        rangeSum = 0
+        
+        while stack:
+            node = stack.pop()
+            
+            if node:
+                if low <= node.val <= high:
+                    rangeSum += node.val
+                
+                if low < node.val:
+                    stack.append(node.left)
+
+                if node.val < high:
+                    stack.append(node.right)
+
+        return rangeSum
