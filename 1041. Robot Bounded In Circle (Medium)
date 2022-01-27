@@ -1,0 +1,28 @@
+# https://leetcode.com/problems/robot-bounded-in-circle/
+
+# O(n) / O(1)
+class Solution:
+    def isRobotBounded(self, instructions: str) -> bool:
+        # north = 0, east = 1, south = 2, west = 3
+        directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+        
+        # initial position -> x=0, y=0
+        x, y = 0, 0
+        
+        # initial direction : north --> idx = 0
+        idx = 0
+        
+        for i in instructions:
+            if i == 'L':    # n -> w, e -> n, s -> e, w -> s 
+                idx = (idx + 3) % 4
+            elif i == 'R':    # n -> e, e -> s, s -> w, w -> n
+                idx = (idx + 1) % 4
+            else:   # n, e, s, w -> idx --> directions[idx][x:0 or y:1]               
+                x += directions[idx][0]
+                y += directions[idx][1]
+        
+        # if there exists a circle,
+        # after one cycle:
+        #   robot returns into initial position x=0, y=0
+        #   or robot doesn't face north 
+        return (x == 0 and y == 0) or idx != 0
