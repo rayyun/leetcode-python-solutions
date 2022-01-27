@@ -1,0 +1,49 @@
+# Solution #1. Recursion
+# O(n log n or n^2?) / O(n)
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        def dfs(node, partSum, path):                        
+            if not node.left and not node.right and partSum == targetSum:
+                res.append(path)                
+                return
+            
+            if node.left:
+                dfs(node.left, partSum + node.left.val, path + [node.left.val])
+            
+            if node.right:
+                dfs(node.right, partSum + node.right.val, path + [node.right.val])
+            
+
+        if not root:
+            return 
+        
+        res = []
+        dfs(root, root.val, [root.val])
+        
+        return res
+
+
+# Solution #2 - Iterative
+# O(n) / O(n)
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        if not root:
+            return
+        
+        res = []
+        stack = [(root, root.val, [root.val])]
+        
+        while stack:
+            node, partSum, path = stack.pop()
+            
+            if not node.left and not node.right and partSum == targetSum:
+                res.append(path)
+                continue
+            
+            if node.left:
+                stack.append((node.left, partSum + node.left.val, path + [node.left.val]))
+                
+            if node.right:
+                stack.append((node.right, partSum + node.right.val, path + [node.right.val]))
+                
+        return res
