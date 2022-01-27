@@ -1,0 +1,57 @@
+# https://leetcode.com/problems/path-sum-iii/
+
+# Solution #1 - Recursion
+# O(n) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        def dfs(node, partSum):
+            if not node:
+                return
+            
+            partSum += node.val
+            
+            if partSum == targetSum:
+                self.count += 1
+            
+            self.count += seen[partSum - targetSum]
+            
+            seen[partSum] += 1
+            
+            dfs(node.left, partSum)
+            dfs(node.right, partSum)
+            
+            seen[partSum] -= 1
+            
+        
+        seen = defaultdict(int)
+        self.count = 0
+        
+        dfs(root, 0)
+        
+        return self.count
+        
+
+# Solution #2 - Iterative
+# O(n log n)? / O(n)
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        if not root:
+            return 0
+        
+        count = 0
+        stack = [(root, [root.val])]
+        
+        while stack:
+            node, partSums = stack.pop()
+            
+            count += partSums.count(targetSum)
+            
+            if node.left:
+                stack.append((node.left, [pSum + node.left.val for pSum in partSums] + [node.left.val]))
+                
+            if node.right:
+                stack.append((node.right, [pSum + node.right.val for pSum in partSums] + [node.right.val]))
+                
+        return count
