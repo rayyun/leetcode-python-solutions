@@ -1,0 +1,18 @@
+# https://leetcode.com/problems/generate-parentheses/
+
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        def generator(paren, left, right):
+            if len(paren) == 2 * n:
+                res.append(paren)
+                return
+                
+            if left > 0:
+                generator(paren+'(', left-1, right)
+            
+            if left < right:
+                generator(paren+')', left, right-1)
+                
+        res = []
+        generator('', n, n)
+        return res
