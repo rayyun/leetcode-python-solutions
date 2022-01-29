@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/campus-bikes/
+
+# O(mn log mn) / O(mn)
+from collections import defaultdict
+
+class Solution:
+    def assignBikes(self, workers: List[List[int]], bikes: List[List[int]]) -> List[int]:
+        distances = defaultdict(list)
+        res = [-1 for _ in range(len(workers))]
+        bike_assigned = set()
+        
+        for i, w_pos in enumerate(workers):
+            for j, b_pos in enumerate(bikes):
+                mh_dist = abs(w_pos[0] - b_pos[0]) + abs(w_pos[1] - b_pos[1])
+                distances[mh_dist].append((i, j))
+                
+        for k in sorted(distances.keys()):
+            for w, b in distances[k]:
+                if res[w] == -1 and b not in bike_assigned:
+                    res[w] = b
+                    bike_assigned.add(b)
+                    
+        return res
