@@ -1,0 +1,29 @@
+# https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game/
+
+# O(n) / O(1)
+class Solution:
+    def tictactoe(self, moves: List[List[int]]) -> str:
+        L = 3
+        rows = [0 for _ in range(L)]
+        cols = [0 for _ in range(L)]
+        diag, anti_diag = 0, 0
+        
+        players = {1: 'A', -1: 'B'}
+        player = 1
+        
+        for r, c in moves:
+            rows[r] += player
+            cols[c] += player
+            
+            if r == c:
+                diag += player
+            
+            if r + c == L - 1:
+                anti_diag += player
+                
+            if any(abs(line) == L for line in (rows[r], cols[c], diag, anti_diag)):
+                return players[player]
+            
+            player *= -1
+            
+        return 'Draw' if len(moves) == L*L else 'Pending'
