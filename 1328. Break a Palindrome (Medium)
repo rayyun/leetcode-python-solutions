@@ -1,0 +1,34 @@
+# https://leetcode.com/problems/break-a-palindrome/
+
+# Solution 1
+# O(n) / O(1)
+class Solution:
+    def breakPalindrome(self, palindrome: str) -> str:
+        L = len(palindrome)
+        
+        if L == 1:
+            return ''
+        
+        for idx, char in enumerate(palindrome):
+            if char != 'a':
+                if L % 2 == 1 and L // 2 == idx:
+                    continue
+                return palindrome[0:idx] + 'a' + palindrome[idx+1:]
+                        
+        return palindrome[0:-1] + 'b'
+        
+
+# Solution 2
+# O(n) / O(1)
+class Solution:
+    def breakPalindrome(self, palindrome: str) -> str:
+        L = len(palindrome)
+        
+        if L == 1:
+            return ''
+        
+        for i in range(L//2):
+            if palindrome[i] != 'a':
+                return palindrome[:i] + 'a' + palindrome[i+1:]
+        
+        return palindrome[:-1] + 'b'
