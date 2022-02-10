@@ -1,0 +1,54 @@
+# https://leetcode.com/problems/max-area-of-island/
+
+# Solution 1 - DFS - Recursion
+# O(R*C) / O(R*C)
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+        
+        def area(row, col):
+            if not (0 <= row < R and 0 <= col < C and (row, col) not in seen and grid[row][col]):
+                return 0
+            
+            seen.add((row, col))
+            
+            return (1 + area(row-1, col) + area(row+1, col) + area(row, col-1) + area(row, col+1))
+        
+        
+        max_area = 0
+        seen = set()
+        
+        for r in range(R):
+            for c in range(C):
+                max_area = max(max_area, area(r, c))
+                
+        return max_area
+        
+        
+# Solution 2 - DFS - Iterative
+# O(R*C) / O(R*C)
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+        maxArea = 0
+        seen = set()
+        
+        for r0, row in enumerate(grid):
+            for c0, val in enumerate(row):
+                if val == 1 and (r0, c0) not in seen:
+                    area = 0
+                    stack = [(r0, c0)]
+                    seen.add((r0, c0))
+                    
+                    while stack:
+                        r, c = stack.pop()
+                        area += 1
+                        
+                        for new_r, new_c in ((r-1, c), (r+1, c), (r, c-1), (r, c+1)):
+                            if (0 <= new_r < R and 0 <= new_c < C and grid[new_r][new_c] and (new_r, new_c) not in seen):
+                                stack.append((new_r, new_c))
+                                seen.add((new_r, new_c))
+                                
+                    maxArea = max(maxArea, area)
+                    
+        return maxArea
