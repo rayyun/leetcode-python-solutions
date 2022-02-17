@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/word-pattern/
+
+# O(n) / O(n)
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:
+        s_list = s.split(' ')
+
+        if len(pattern) != len(s_list):
+            return False
+        
+        pair_dict = dict()        
+        
+        for p, word in zip(pattern, s_list):
+            if p not in pair_dict.keys():
+                if word in pair_dict.values():
+                    return False
+                else:
+                    pair_dict[p] = word
+            else:
+                if pair_dict[p] != word:
+                    return False
+                
+        return True
