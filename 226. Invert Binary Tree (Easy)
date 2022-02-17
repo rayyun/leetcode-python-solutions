@@ -1,0 +1,34 @@
+# https://leetcode.com/problems/invert-binary-tree/
+
+# Solution 1 - Recursion
+# O(n) / O(n)
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def swap(node):
+            if not node:
+                return
+            
+            node.left, node.right = swap(node.right), swap(node.left)            
+            return node
+            
+                
+        return swap(root)
+        
+        
+# Solution 2 - Iterative
+# O(n) / O(n)
+class Solution:
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return
+        
+        stack = [root]
+        
+        while stack:
+            node = stack.pop()
+            if node:
+                node.left, node.right = node.right, node.left
+                stack.append(node.left)
+                stack.append(node.right)
+            
+        return root
