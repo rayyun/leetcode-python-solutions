@@ -1,0 +1,50 @@
+# https://leetcode.com/problems/sentence-similarity/
+
+# Solution 1 - Hash map
+# O(n) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def areSentencesSimilar(self, sentence1: List[str], sentence2: List[str], similarPairs: List[List[str]]) -> bool:
+        if len(sentence1) != len(sentence2):
+            return False
+        
+        pair_dict = defaultdict(set)
+        
+        for w1, w2 in similarPairs:
+            pair_dict[w2].add(w1)
+            pair_dict[w1].add(w2)
+            
+        for s1, s2 in zip(sentence1, sentence2):
+            if s1 == s2:
+                continue
+                
+            if s1 not in pair_dict and s2 not in pair_dict:
+                return False
+            else:
+                if s1 in pair_dict:
+                    if s2 not in pair_dict[s1]:
+                        return False
+                elif s2 in pair_dict:
+                    if s1 not in pair_dict[s2]:
+                        return False                
+            
+        return True
+        
+       
+# Solution 2 - Hash set
+# O(n) / O(n)
+class Solution:
+    def areSentencesSimilar(self, sentence1: List[str], sentence2: List[str], similarPairs: List[List[str]]) -> bool:
+        similarSet = set(map(tuple, similarPairs))
+        
+        if len(sentence1) != len(sentence2):
+            return False
+        
+        for s1, s2 in zip(sentence1, sentence2):
+            pair_1, pair_2 = (s1, s2), (s2, s1)
+            
+            if s1 != s2 and pair_1 not in similarSet and pair_2 not in similarSet:
+                return False
+            
+        return True
