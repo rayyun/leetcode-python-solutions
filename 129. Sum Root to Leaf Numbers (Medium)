@@ -1,0 +1,45 @@
+# https://leetcode.com/problems/sum-root-to-leaf-numbers/
+
+# Solution 1 - Recursion 
+# O(n) / O(h)
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        def addNodes(node, curr_num):
+            nonlocal root_to_leaf
+            
+            if node:
+                curr_num = curr_num * 10 + node.val
+            
+                if not node.left and not node.right:
+                    root_to_leaf += curr_num
+
+                addNodes(node.left, curr_num)
+                addNodes(node.right, curr_num)
+        
+        root_to_leaf = 0
+        addNodes(root, 0)
+        
+        return root_to_leaf
+        
+        
+        
+# Solution 2 - Iterative
+# O(n) / O(h)
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        root_to_leaf = 0
+        stack = [(root, 0)]
+        
+        while stack:
+            node, curr_num = stack.pop()
+            
+            if node:
+                curr_num = curr_num * 10 + node.val
+                
+                if not node.left and not node.right:
+                    root_to_leaf += curr_num
+                
+                stack.append((node.left, curr_num))
+                stack.append((node.right, curr_num))
+                
+        return root_to_leaf
