@@ -1,0 +1,28 @@
+# https://leetcode.com/problems/insert-interval/
+
+# O(n) / O(n)
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        new_start, new_end = newInterval
+        idx, n = 0, len(intervals)
+        res = []
+        
+        while idx < n and intervals[idx][0] < new_start:
+            res.append(intervals[idx])
+            idx += 1
+            
+        if not res or res[-1][1] < new_start:
+            res.append([new_start, new_end])
+        else:
+            res[-1][1] = max(res[-1][1], new_end)
+            
+        
+        while idx < n:
+            if intervals[idx][0] > new_end:
+                res.append(intervals[idx])
+            else:
+                res[-1][1] = max(res[-1][1], intervals[idx][1])
+            
+            idx += 1
+            
+        return res
