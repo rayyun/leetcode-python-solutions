@@ -1,0 +1,61 @@
+# https://leetcode.com/problems/sort-characters-by-frequency/
+
+# Solution 1 - Hashmap & Sort
+# O(n log n) / O(n)
+from collections import Counter
+
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        s_count = Counter(s)
+        res = []
+        
+        for char in sorted(s_count, key=s_count.get, reverse=True):
+            res.append(char * s_count[char])
+            
+        return ''.join(res)
+        
+     
+# Solution 2 - Array & Sort
+# O(n log n) / O(n)
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        s = list(s)
+        s.sort()
+        str_list = []
+        
+        cur_str = [s[0]]
+        
+        for c in s[1:]:
+            if cur_str[-1] != c:
+                str_list.append(''.join(cur_str))
+                cur_str = []
+            
+            cur_str.append(c)
+            
+        str_list.append(''.join(cur_str))
+                
+        str_list.sort(key=lambda x: len(x), reverse=True)
+        
+        return ''.join(str_list)
+        
+        
+# Solution 3 - Hashmap & Bucket Sort
+# O(n) / O(n)
+from collections import Counter
+
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        s_count = Counter(s)
+        max_num = max(s_count.values())
+        res = []
+        
+        bucket = [[] for _ in range(max_num + 1)]
+        
+        for char, count in s_count.items():
+            bucket[count].append(char)
+            
+        for i in range(max_num, -1, -1):
+            for char in bucket[i]:
+                res.append(char * i)
+                
+        return ''.join(res)
