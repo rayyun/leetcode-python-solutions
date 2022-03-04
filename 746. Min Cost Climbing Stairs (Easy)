@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/min-cost-climbing-stairs/
+
+# O(n) / O(n)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        def minCost(step):
+            if step <= 1:
+                return 0
+            
+            if step in seen:
+                return seen[step]
+            
+            down_one = minCost(step - 1) + cost[step - 1]
+            down_two = minCost(step - 2) + cost[step - 2]
+            
+            seen[step] = min(down_one, down_two)
+            
+            return seen[step]
+            
+        seen = {}
+        
+        return minCost(len(cost))
