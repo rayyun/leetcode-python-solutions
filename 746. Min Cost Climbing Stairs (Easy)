@@ -1,5 +1,26 @@
 # https://leetcode.com/problems/min-cost-climbing-stairs/
 
+# Solution 1 - Top-down (1)
+# O(n) / O(n)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        def minCost(step):
+            if step in seen:
+                return seen[step]
+            
+            if step < 2:
+                seen[step] = cost[step]
+            else:
+                seen[step] = min(minCost(step-2), minCost(step-1)) + cost[step]
+                
+            return seen[step]            
+            
+        N = len(cost)  
+        seen = {}
+        return min(minCost(N-1), minCost(N-2))
+        
+        
+# Solution 2 - Top-down (2)
 # O(n) / O(n)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
@@ -10,13 +31,44 @@ class Solution:
             if step in seen:
                 return seen[step]
             
-            down_one = minCost(step - 1) + cost[step - 1]
-            down_two = minCost(step - 2) + cost[step - 2]
-            
+            down_one = minCost(step-1) + cost[step-1]
+            down_two = minCost(step-2) + cost[step-2]
             seen[step] = min(down_one, down_two)
             
             return seen[step]
             
+            
+        N = len(cost)
         seen = {}
         
-        return minCost(len(cost))
+        return minCost(N)
+        
+        
+# Solution 3 - Bottom-up
+# O(n) / O(n)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        N = len(cost)
+        min_cost = [0] * (N + 1)
+        
+        for step in range(2, N + 1):
+            down_one = min_cost[step - 1] + cost[step - 1]
+            down_two = min_cost[step - 2] + cost[step - 2]
+            
+            min_cost[step] = min(down_one, down_two)
+            
+        return min_cost[-1]
+        
+        
+# Solution 4 - Bottom-up : constant space
+# O(n) / O(1)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        down_one, down_two = 0, 0
+        
+        for step in range(2, len(cost) + 1):
+            temp = down_one
+            down_one = min(down_one + cost[step-1], down_two + cost[step-2])
+            down_two = temp
+            
+        return down_one
