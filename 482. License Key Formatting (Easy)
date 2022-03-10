@@ -1,0 +1,40 @@
+# https://leetcode.com/problems/license-key-formatting/
+
+# Solution 1
+# O(n) / O(n)
+class Solution:
+    def licenseKeyFormatting(self, s: str, k: int) -> str:
+        res = []
+        temp = ''
+        
+        for c in s[::-1]:
+            if c != '-':
+                if len(temp) < k:
+                    temp += c.upper()
+                
+                if len(temp) == k:
+                    res.append(temp[::-1])
+                    temp = ''
+                    
+        if len(temp) > 0:
+            res.append(temp[::-1])
+            
+        return '-'.join(res[::-1])
+        
+        
+        
+# Solution 2
+# O(n) / O(n)
+class Solution:
+    def licenseKeyFormatting(self, s: str, k: int) -> str:
+        s = s.replace('-', '').upper()
+        
+        remainder = len(s) % k
+        
+        first_group = [s[:remainder]]
+        other_group = [s[i*k + remainder: (i*k + remainder)+k] for i in range(len(s) // k)]
+        
+        if remainder:
+            return '-'.join(first_group + other_group)
+        else:
+            return '-'.join(other_group)
