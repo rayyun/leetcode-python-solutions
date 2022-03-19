@@ -1,0 +1,39 @@
+# https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+# Solution 1 - Sliding Window (2 pointer + hashset)
+# O(n) / O(n)
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = set()
+        longest = 0
+        
+        start, curr = 0, 0
+        while curr < len(s):
+            if s[curr] not in seen:
+                seen.add(s[curr])
+                curr += 1
+                longest = max(longest, len(seen))
+            else:
+                seen.remove(s[start])
+                start += 1
+                
+        return longest
+        
+        
+        
+# Solution 2 - Sliding Window (2 pointer + hashmap)
+# O(n) / O(n)
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        start, max_length = 0, 0
+        seen = {}
+        
+        for idx, char in enumerate(s):
+            if char in seen and start <= seen[char]:
+                start = seen[char] + 1
+            else:
+                max_length = max(max_length, idx - start + 1)
+            
+            seen[char] = idx
+            
+        return max_length
