@@ -1,0 +1,63 @@
+# https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list/
+
+# Solution 1
+# O(n) / O(1)
+class Solution:
+    def insert(self, head: 'Optional[Node]', insertVal: int) -> 'Node':
+        if not head:
+            newNode = Node(insertVal)
+            newNode.next = newNode
+            return newNode
+        
+        node = head
+        
+        while node.next != head:
+            if node.val <= node.next.val:
+                if node.val <= insertVal <= node.next.val:
+                    break
+            else:
+                if node.val <= insertVal or insertVal <= node.next.val:
+                    break
+            
+            node = node.next
+            
+        newNode = Node(insertVal, node.next)
+        node.next = newNode
+        
+        return head
+
+
+
+# O(n) / O(1)
+class Solution:
+    def insert(self, head: 'Optional[Node]', insertVal: int) -> 'Node':
+        if not head:
+            newNode = Node(insertVal)
+            newNode.next = newNode
+            
+            return newNode
+        
+        prev, curr = head, head.next
+        insert = False
+        
+        while True:
+            if prev.val <= insertVal <= curr.val:
+                insert = True
+            elif prev.val > curr.val:
+                if insertVal >= prev.val or insertVal <= curr.val:
+                    insert = True
+                    
+            if insert:
+                newNode = Node(insertVal, curr)
+                prev.next = newNode
+                return head
+            
+            prev, curr = curr, curr.next
+            
+            if prev == head:
+                break
+                
+        newNode = Node(insertVal, curr)
+        prev.next = newNode
+        
+        return head
