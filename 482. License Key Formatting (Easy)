@@ -38,3 +38,21 @@ class Solution:
             return '-'.join(first_group + other_group)
         else:
             return '-'.join(other_group)
+
+
+# Solution 3
+# O(n) / O(n)
+# O(n) / O(n)
+class Solution:
+    def licenseKeyFormatting(self, s: str, k: int) -> str:
+        s = s.replace('-', '').upper()
+        
+        head_length = len(s) % k
+        
+        first_group = [s[:head_length]]
+        second_group = [s[i: i + k] for i in range(head_length, len(s), k)]
+        
+        if head_length:
+            return '-'.join(first_group + second_group)
+        else:
+            return '-'.join(second_group)
