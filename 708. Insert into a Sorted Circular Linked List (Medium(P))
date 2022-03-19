@@ -27,7 +27,7 @@ class Solution:
         return head
 
 
-
+# Solution 2
 # O(n) / O(1)
 class Solution:
     def insert(self, head: 'Optional[Node]', insertVal: int) -> 'Node':
