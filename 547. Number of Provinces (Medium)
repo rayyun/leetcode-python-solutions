@@ -29,7 +29,7 @@ class Solution:
         return len(set(find(i) for i in range(N)))
         
 
-# Solution 1-2 - Union Find - basic
+# Solution 1-2 - Union Find - basic (use 'count' to count province)
 # O(n^3) / O(n)
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
