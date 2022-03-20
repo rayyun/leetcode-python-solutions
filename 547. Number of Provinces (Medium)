@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/number-of-provinces/
 
-# Solution 1 - Union Find (Basic)
+# Solution 1-1 - Union Find - basic
 # O(n^3) / O(n)
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
@@ -27,3 +27,110 @@ class Solution:
                     union(i, j)
                     
         return len(set(find(i) for i in range(N)))
+        
+
+# Solution 1-2 - Union Find - basic
+# O(n^3) / O(n)
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def find(x):
+            while x != root[x]:
+                x = root[x]
+            
+            return x            
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal count
+            
+            if rootX != rootY:
+                root[rootY] = rootX
+
+                count -= 1            
+        
+        N = len(isConnected)
+        root = [i for i in range(N)]
+        count = N
+        
+        for i in range(N):
+            for j in range(i+1, N):
+                if isConnected[i][j] == 1:
+                    union(i, j)                    
+                    
+        return count
+
+        
+# Solution 2 - Union Find with Path Compression
+# O(n^3) / O(n)
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def find(x):
+            if x == root[x]:
+                return x
+            
+            root[x] = find(root[x])
+            return root[x]
+        
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal count
+            
+            if rootX != rootY:
+                root[rootY] = rootX
+                count -= 1
+            
+            
+        N = len(isConnected)
+        root = [i for i in range(N)]
+        count = N
+        
+        for i in range(N):
+            for j in range(i+1, N):
+                if isConnected[i][j] == 1:
+                    union(i, j)
+                    
+        return count
+        
+        
+        
+# Solution 3 - Union Find with Path Compression and Union by Rank
+# O(n^3) / O(n)
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def find(x):
+            if x == root[x]:
+                return x
+            
+            root[x] = find(root[x])
+            return root[x]
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal count
+            
+            if rootX != rootY:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootX] < rank[rootY]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+                    
+                count -= 1
+                
+        
+        N = len(isConnected)
+        root = [i for i in range(N)]
+        rank = [1] * N
+        count = N
+        
+        for i in range(N):
+            for j in range(i+1, N):
+                if isConnected[i][j] == 1:
+                    union(i, j)
+        
+        return count
