@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/graph-valid-tree/
+
+# Solution 1 - Union Find (with compression path and union by rank)
+# O(n^2) / O(n)
+class Solution:
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        def find(x):
+            if x == root[x]:
+                return x
+            
+            root[x] = find(root[x])
+            return root[x]
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal tree_count
+            
+            if rootX == rootY:
+                return False
+            else:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootX] < rank[rootY]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+                
+                tree_count -= 1
+            
+            return True
+                
+        
+        root = [i for i in range(n)]
+        rank = [1] * n
+        tree_count = n
+        
+        for x, y in edges:
+            if not union(x, y):
+                return False
+            
+        return tree_count == 1
