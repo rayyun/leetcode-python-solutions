@@ -1,0 +1,60 @@
+# https://leetcode.com/problems/smallest-string-with-swaps/
+
+# Solution 1 - Union Find (compression path and union by rank)
+# O((E+V)⋅α(V)+VlogV) / O(V)
+from collections import defaultdict
+
+class Solution:
+    def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
+        def find(x):
+            if x == root[x]:
+                return x
+            
+            root[x] = find(root[x])
+            return root[x]
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal count
+            
+            if rootX != rootY:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootX] < rank[rootY]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+                
+                count -= 1            
+            
+            
+        N = len(s)
+        root = [i for i in range(N)]
+        rank = [1] * N
+        count = N
+        
+        for x, y in pairs:
+            union(x, y)
+            
+        if count == 1:
+            return ''.join(sorted(s))
+        
+        index_by_root = defaultdict(list)
+        char_by_root = defaultdict(list)
+        
+        for i in range(N):
+            root_idx = find(i)
+            
+            index_by_root[root_idx].append(i)
+            char_by_root[root_idx].append(s[i])
+            
+        res = [None] * N
+        
+        for root_idx in index_by_root:
+            sorted_char_by_root = sorted(char_by_root[root_idx])
+            for idx, real_idx in enumerate(index_by_root[root_idx]):
+                res[real_idx] = sorted_char_by_root[idx]
+                
+        return ''.join(res)
