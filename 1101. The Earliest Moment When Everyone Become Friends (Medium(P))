@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/
+
+# Solution 1 - Union Find (compression path and union by rank)
+# O(V + E log E + E⋅α(V)) / O(E(for sort)+V)
+class Solution:
+    def earliestAcq(self, logs: List[List[int]], n: int) -> int:
+        def find(x):
+            if x == root[x]:
+                return x
+            
+            root[x] = find(root[x])
+            return root[x]            
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            nonlocal count
+            
+            if rootX != rootY:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootX] < rank[rootX]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+                    
+                count -= 1
+            
+            
+        root = [i for i in range(n)]
+        rank = [1] * n
+        count = n
+        min_timestamp = 0
+        logs = sorted(logs)
+        
+        for timestamp, x, y in logs:
+            union(x, y)
+            if count == 1:
+                return timestamp
+        return -1
