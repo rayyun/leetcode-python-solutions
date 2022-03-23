@@ -1,0 +1,30 @@
+# https://leetcode.com/problems/find-if-path-exists-in-graph/
+
+# Solution 1 - DFS
+# O(V+E) / O(V+E)
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if n == 1:
+            return True
+        
+        neighbors = [[] for _ in range(n)]
+        
+        for s, d in edges:
+            neighbors[s].append(d)
+            neighbors[d].append(s)
+            
+        stack = [source]
+        seen = set()
+        
+        while stack:
+            node = stack.pop()
+            seen.add(node)
+
+            for neigh_node in neighbors[node]:
+                if neigh_node == destination:
+                    return True
+                
+                if neigh_node not in seen:
+                    stack.append(neigh_node)
+            
+        return False
