@@ -1,0 +1,11 @@
+# https://leetcode.com/problems/fair-candy-swap/
+
+# O(n) / O(n)
+class Solution:
+    def fairCandySwap(self, aliceSizes: List[int], bobSizes: List[int]) -> List[int]:
+        difference = (sum(bobSizes) - sum(aliceSizes)) // 2
+        b_set = set(bobSizes)
+        
+        for a in set(aliceSizes):
+            if (a + difference) in b_set:
+                return [a, a + difference]
