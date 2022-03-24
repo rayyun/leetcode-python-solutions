@@ -136,7 +136,7 @@ class Solution:
         return count
 
 
-# Solution 4-1 - DFS (use hashset for visited node tracking)
+# Solution 4-1 - DFS (use hashset for tracking visited node)
 # O(n^2) / O(n)
 
 class Solution:
@@ -160,7 +160,7 @@ class Solution:
         return province_count
 
 
-# Solution 4-2 - DFS (use N-size list for visited node tracking)
+# Solution 4-2 - DFS (use N-size list for tracking visited node)
 # O(n^2) / O(n)
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
@@ -181,3 +181,57 @@ class Solution:
                 province_count += 1
                 
         return province_count
+
+
+
+# Solution 5-1 - BFS (use hashset for tracking visited node)
+# O(n^2) / O(n)
+from collections import deque
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        N = len(isConnected)
+        seen = set()
+        count = 0
+        
+        for node in range(N):
+            if node not in seen:
+                queue = deque([node])
+                count += 1
+                
+                while queue:
+                    node = queue.popleft()
+                    seen.add(node)
+                    
+                    for next_node, val in enumerate(isConnected[node]):
+                        if val == 1 and next_node not in seen:
+                            queue.append(next_node)                
+                        
+        return count
+        
+        
+        
+# Solution 5-2 - BFS (use N-size list for tracking visited node)
+# O(n^2) / O(n)
+from collections import deque
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        N = len(isConnected)
+        visited = [False] * N
+        count = 0
+        
+        for node in range(N):
+            if not visited[node]:
+                queue = deque([node])
+                count += 1
+                
+                while queue:
+                    node = queue.popleft()
+                    visited[node] = True
+                    
+                    for next_node, val in enumerate(isConnected[node]):
+                        if val == 1 and not visited[next_node]:
+                            queue.append(next_node)
+                                     
+        return count
