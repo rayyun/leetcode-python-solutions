@@ -134,3 +134,50 @@ class Solution:
                     union(i, j)
         
         return count
+
+
+# Solution 4-1 - DFS (use hashset for visited node tracking)
+# O(n^2) / O(n)
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def dfs(node):
+            for next_node, val in enumerate(isConnected[node]):
+                if val == 1 and next_node not in seen:
+                    seen.add(next_node)
+                    dfs(next_node)
+            
+        N = len(isConnected)
+        seen = set()
+        province_count = 0
+        
+        for n in range(N):
+            if n not in seen:
+                seen.add(n)
+                dfs(n)
+                province_count += 1
+                
+        return province_count
+
+
+# Solution 4-2 - DFS (use N-size list for visited node tracking)
+# O(n^2) / O(n)
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def dfs(node):
+            for next_node, val in enumerate(isConnected[node]):
+                if val == 1 and not visited[next_node]:
+                    visited[next_node] = True
+                    dfs(next_node)
+            
+        N = len(isConnected)
+        visited = [False] * N
+        province_count = 0
+        
+        for n in range(N):
+            if not visited[n]:
+                visited[n] = True
+                dfs(n)
+                province_count += 1
+                
+        return province_count
