@@ -28,3 +28,36 @@ class Solution:
                     stack.append(neigh_node)
             
         return False
+
+
+# Solution 2 - BFS
+# O(V+E) / O(V+E)
+from collections import deque
+
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if n == 1:
+            return True
+        
+        neighbors = [[] for _ in range(n)]
+        
+        for s, d in edges:
+            neighbors[s].append(d)
+            neighbors[d].append(s)
+            
+        queue = deque([source])
+        seen = set()
+        
+        while queue:
+            node = queue.popleft()
+            
+            if node == destination:
+                return True
+            
+            seen.add(node)
+            
+            for next_node in neighbors[node]:
+                if next_node not in seen:
+                    queue.append(next_node)
+        
+        return False
