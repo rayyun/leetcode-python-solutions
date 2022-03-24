@@ -1,0 +1,15 @@
+# https://leetcode.com/problems/find-pivot-index/
+
+# O(n) / O(1)
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        leftsum, rightsum = 0, sum(nums)
+        
+        for idx, num in enumerate(nums):
+            if leftsum == rightsum - num:
+                return idx
+            
+            leftsum += num
+            rightsum -= num
+            
+        return -1
