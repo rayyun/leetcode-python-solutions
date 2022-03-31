@@ -1,0 +1,54 @@
+# https://leetcode.com/problems/evaluate-reverse-polish-notation/
+
+# Solution 1 - Stack - use eval() function 
+# O(n) / O(n)
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        if len(tokens) == 1:
+            return int(tokens[0])
+        
+        stack = []
+        res = ""
+        
+        for tk in tokens:
+            if tk in ('+', '-', '*', '/'):
+                num2 = stack.pop()
+                num1 = stack.pop()
+                res = str(int(eval(num1 + tk + num2)))
+                stack.append(res)
+                    
+            else:
+                stack.append(tk)
+        
+        return int(res)
+        
+
+# Solution 2 - Stack - use lambda function
+# O(n) / O(n)
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        if len(tokens) == 1:
+            return int(tokens[0])
+        
+        stack = []
+        res = 0
+        
+        operations = {
+            '+' : lambda x, y: x + y,
+            '-' : lambda x, y: x - y,
+            '*' : lambda x, y: x * y,
+            '/' : lambda x, y: x / y
+        }
+        
+        for tk in tokens:
+            if tk in operations:
+                num2 = stack.pop()
+                num1 = stack.pop()
+                operation = operations[tk]
+                res = int(operation(num1, num2))
+                stack.append(res)
+                    
+            else:
+                stack.append(int(tk))
+        
+        return res
