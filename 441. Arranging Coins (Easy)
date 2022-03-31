@@ -1,0 +1,20 @@
+# https://leetcode.com/problems/arranging-coins/
+
+# O(log N) / O(1)
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        left, right = 0, n
+        
+        while left <= right:
+            k_steps = (right + left) // 2
+            total_coins = k_steps * (k_steps + 1) // 2
+            
+            if total_coins == n:
+                return k_steps
+            
+            if n < total_coins:
+                right = k_steps - 1
+            else:
+                left = k_steps + 1
+                                
+        return right
