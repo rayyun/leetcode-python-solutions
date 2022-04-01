@@ -66,10 +66,9 @@ class Solution:
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def find(x):
-            if x == root[x]:
-                return x
-            
-            root[x] = find(root[x])
+            if x != root[x]:
+                root[x] = find(root[x])
+                
             return root[x]
         
         def union(x, y):
@@ -100,10 +99,9 @@ class Solution:
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         def find(x):
-            if x == root[x]:
-                return x
-            
-            root[x] = find(root[x])
+            if x != root[x]:
+                root[x] = find(root[x])
+                
             return root[x]
             
         def union(x, y):
