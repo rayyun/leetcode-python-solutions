@@ -7,22 +7,23 @@ class Solution:
         if not head:
             newNode = Node(insertVal)
             newNode.next = newNode
+            
             return newNode
         
-        node = head
+        curr = head
         
-        while node.next != head:
-            if node.val <= node.next.val:
-                if node.val <= insertVal <= node.next.val:
+        while curr.next != head:
+            if curr.val <= curr.next.val:
+                if curr.val <= insertVal <= curr.next.val:
                     break
             else:
-                if node.val <= insertVal or insertVal <= node.next.val:
+                if curr.val <= insertVal or insertVal <= curr.next.val:
                     break
             
-            node = node.next
-            
-        newNode = Node(insertVal, node.next)
-        node.next = newNode
+            curr = curr.next
+
+        newNode = Node(insertVal, curr.next)
+        curr.next = newNode
         
         return head
 
