@@ -1,0 +1,28 @@
+# https://leetcode.com/problems/copy-list-with-random-pointer/
+
+# O(n) / O(n)
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        dummy = Node(0)
+        copy = dummy
+        
+        visited = dict()
+        visited[None] = None
+        
+        while head:
+            if head not in visited:
+                copy.next = Node(head.val)
+                visited[head] = copy.next
+            else:
+                copy.next = visited[head]
+                
+            if head.random not in visited:
+                copy.next.random = Node(head.random.val)
+                visited[head.random] = copy.next.random
+            else:
+                copy.next.random = visited[head.random]
+                
+            head = head.next
+            copy = copy.next
+            
+        return dummy.next
