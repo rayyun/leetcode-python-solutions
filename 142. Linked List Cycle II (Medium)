@@ -1,0 +1,47 @@
+# https://leetcode.com/problems/linked-list-cycle-ii/
+
+# Solution 1 - Two pointer
+# O(n) / O(1)
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return None
+        
+        slow = fast = head
+        joint = None
+        
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast:
+                joint = slow
+                break
+                
+        if not joint:
+            return None
+        
+        p1, p2 = head, joint
+        
+        while p1 != p2:
+            p1 = p1.next
+            p2 = p2.next
+            
+        return p1
+        
+        
+# Solution 2 - Hashset
+# O(n) / O(n)
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        seen = set()
+        
+        curr = head
+        while curr:
+            if curr in seen:
+                return curr
+            
+            seen.add(curr)
+            curr = curr.next
+            
+        return None
