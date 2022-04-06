@@ -15,7 +15,7 @@ class Solution:
         return node_list == node_list[::-1]
         
 
-# Solution 2 - Find middle, Reverse second half, Compare two half
+# Solution 2 - Reverse Second Half In-place
 # O(n) / O(1)
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
