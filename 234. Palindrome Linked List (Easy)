@@ -1,0 +1,47 @@
+# https://leetcode.com/problems/palindrome-linked-list/
+
+# Solution 1 - List
+# O(n) / O(n)
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        node_list = []
+        
+        curr = head
+        while curr:
+            node_list.append(curr.val)
+            
+            curr = curr.next
+            
+        return node_list == node_list[::-1]
+        
+
+# Solution 2 - Find middle, Reverse second half, Compare two half
+# O(n) / O(1)
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        slow = fast = head
+        prev, curr = None, head
+        
+        # find the middle
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+                    
+        # reverse the second half
+        prev, curr = None, slow
+        
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev, curr = curr, next
+        
+        # prev --> head of reversed second half
+        
+        # compare the two half
+        while head and prev:
+            if head.val != prev.val:
+                return False
+            head = head.next
+            prev = prev.next
+        
+        return True
