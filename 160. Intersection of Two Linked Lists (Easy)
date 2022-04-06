@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+# Solution 1 - Two pointer
+# O(n) / O(1)
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        pA, pB = headA, headB
+        
+        while pA != pB:
+            if not pA:                
+                pA = headB
+            else:
+                pA = pA.next
+                
+            if not pB:
+                pB = headA
+            else:
+                pB = pB.next
+                
+        return pA
+        
+        
+        
+# Solution 2 - Hashset
+# O(n) / O(n)
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        seen = set()
+        curr = headA
+        
+        while curr:
+            seen.add(curr)
+            curr = curr.next
+            
+        curr = headB
+        
+        while curr:
+            if curr in seen:
+                return curr
+            
+            curr = curr.next
+            
+        return None
