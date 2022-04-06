@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/next-greater-element-i/
+
+# Solution 1 - Brute Force
+# O(n*m) / O(n)
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        num2_dict = {val:idx for idx, val in enumerate(nums2)}
+        
+        res = [None] * len(nums1)
+        
+        for idx, num in enumerate(nums1):
+            index = num2_dict[num]
+            
+            for num2 in nums2[index:]:
+                if num < num2:
+                    res[idx] = num2
+                    break
+                    
+            if not res[idx]:
+                res[idx] = -1        
+        
+        return res
+        
+        
+# Solution 2 - Stack
+# O(n) / O(n)
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        num2_map = dict()
+        stack = [nums2[0]]
+        
+        for num in nums2[1:]:
+            while stack and stack[-1] < num:
+                num2_map[stack.pop()] = num
+                
+            stack.append(num)
+        
+        while stack:
+            num2_map[stack.pop()] = -1
+            
+        return [num2_map[num] for num in nums1]
