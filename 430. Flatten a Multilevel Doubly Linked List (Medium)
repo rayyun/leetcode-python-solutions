@@ -1,0 +1,63 @@
+# https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/
+
+# Solution 1 - DFS - recursion
+# O(n) / O(n)
+class Solution:
+    def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        def flatten_dfs(prev, curr):
+            if not curr:
+                return prev
+            
+            prev.next = curr
+            curr.prev = prev
+
+            tempNext = curr.next
+            
+            tail = flatten_dfs(curr, curr.child)
+            curr.child = None
+            
+            return flatten_dfs(tail, tempNext)
+        
+        
+        if not head:
+            return head
+        
+        dummy = Node(None, None, head, None)
+        flatten_dfs(dummy, head)
+        
+        dummy.next.prev = None
+        
+        return dummy.next
+        
+        
+        
+# Solution 2 - DFS - iterative
+# O(n) / O(n)
+class Solution:
+    def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        if not head:
+            return
+        
+        dummy = Node(None, None, head, None)
+        prev = dummy
+        
+        stack = [head]
+        
+        while stack:
+            curr = stack.pop()
+            
+            prev.next = curr
+            curr.prev = prev
+            
+            if curr.next:
+                stack.append(curr.next)
+                
+            if curr.child:
+                stack.append(curr.child)
+                curr.child = None
+                
+            prev = curr
+            
+        dummy.next.prev = None
+        
+        return dummy.next
