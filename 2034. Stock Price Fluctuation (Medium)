@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/stock-price-fluctuation/
+
+class StockPrice:
+
+    def __init__(self):
+        self.time_stock = dict()
+        self.lastest_timestamp = 0
+        self.min_heap = []
+        self.max_heap = []
+        
+
+    def update(self, timestamp: int, price: int) -> None:
+        self.time_stock[timestamp] = price
+        self.lastest_timestamp = max(self.lastest_timestamp, timestamp)
+        
+        heappush(self.min_heap, (price, timestamp))
+        heappush(self.max_heap, (-price, timestamp))
+        
+
+    def current(self) -> int:
+        return self.time_stock[self.lastest_timestamp]
+        
+
+    def maximum(self) -> int:
+        curr_price, timestamp = heappop(self.max_heap)
+        
+        while -curr_price != self.time_stock[timestamp]:
+            curr_price, timestamp = heappop(self.max_heap)
+            
+        heappush(self.max_heap, (curr_price, timestamp))
+        
+        return -curr_price
+        
+
+    def minimum(self) -> int:
+        curr_price, timestamp = heappop(self.min_heap)
+        
+        while curr_price != self.time_stock[timestamp]:
+            curr_price, timestamp = heappop(self.min_heap)
+            
+        heappush(self.min_heap, (curr_price, timestamp))
+        
+        return curr_price
