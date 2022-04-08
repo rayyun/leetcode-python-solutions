@@ -1,5 +1,26 @@
 # https://leetcode.com/problems/linked-list-cycle/
 
+# Solution 1 - Hashset
+# O(n) / O(n)
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        seen = set()        
+        curr = head
+        
+        while curr:
+            if curr in seen:
+                return True
+            
+            seen.add(curr)
+            curr = curr.next
+            
+        return False
+            
+            
+
+
+
+# Solution 2 - Two Pointer
 # O(n) / O(1)
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
