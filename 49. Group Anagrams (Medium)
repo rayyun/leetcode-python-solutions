@@ -1,0 +1,34 @@
+# https://leetcode.com/problems/group-anagrams/
+
+# Solution 1 - hashmap & sort
+# O(n klogk) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        word_dict = defaultdict(list)
+        
+        for str in strs:
+            key = ''.join(sorted(str))
+            word_dict[key].append(str)
+            
+        return word_dict.values()
+# Solution 2 - hashmap & count alphabet
+# O(n * k) / O(n)    
+from collections import defaultdict
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        str_dict = defaultdict(list)
+        
+        for str in strs:
+            alphabet = [0] * 26
+
+            for char in str:
+                idx = ord(char) - ord('a')
+                alphabet[idx] += 1
+            
+            key = tuple(alphabet)
+            str_dict[key].append(str)
+            
+        return str_dict.values()
