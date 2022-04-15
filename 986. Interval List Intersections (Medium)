@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/interval-list-intersections/
+
+# O(n + m) / O(n + m)
+class Solution:
+    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+        if not firstList or not secondList:
+            return
+        
+        p1, p2 = 0, 0
+        res = []
+        
+        while p1 < len(firstList) and p2 < len(secondList):
+            lo = max(firstList[p1][0], secondList[p2][0])
+            hi = min(firstList[p1][1], secondList[p2][1])
+            
+            if lo <= hi:
+                res.append([lo, hi])
+                
+            if firstList[p1][1] < secondList[p2][1]:
+                p1 += 1
+            elif firstList[p1][1] > secondList[p2][1]:
+                p2 += 1
+            else:
+                p1 += 1
+                p2 += 1
+                
+        return res
