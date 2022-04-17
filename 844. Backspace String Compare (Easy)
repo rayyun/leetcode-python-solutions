@@ -1,0 +1,78 @@
+# https://leetcode.com/problems/backspace-string-compare/
+
+# Solution 1 - stack
+# O(n) / O(n)
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        def backspace(string):   
+            stack = []
+            
+            for c in string:
+                if c == '#':
+                    if stack:
+                        stack.pop()
+                else:
+                    stack.append(c)
+                    
+            return ''.join(stack)
+        
+        return backspace(s) == backspace(t)
+
+
+# Solution 2 - string
+# O(n) / O(1)?
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        def backspace(string):
+            skip = 0
+            res = ""
+            
+            for char in string[::-1]:
+                if char == "#":
+                    skip += 1
+                elif skip > 0:
+                    skip -= 1
+                else:
+                    res += char
+                    
+            return res[::-1]
+        
+        
+        return backspace(s) == backspace(t)
+    
+
+# Solution 3 - string
+# O(n) / O(1)?
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        def backspace(string):
+            res = ''
+            
+            for c in string:
+                if c == '#':
+                    res = res[:-1]
+                else:
+                    res += c
+                    
+            return res
+        
+        return backspace(s) == backspace(t)
+    
+    
+    
+# Solution 4 - yield
+# O(n) / O(1)
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        def backspace(string):
+            skip = 0
+            
+            for c in string[::-1]:
+                if c == "#":
+                    skip += 1
+                elif skip > 0:
+                    skip -= 1
+                else:
+                    yield c
+        
+        return all(s_c == t_c for s_c, t_c in itertools.zip_longest(backspace(s), backspace(t)))
