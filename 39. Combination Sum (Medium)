@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/combination-sum/
+
+# Solution - Backtracking
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        def backtrack(nums, sums, path):
+            if sums == target:
+                res.append(path[:])
+                return
+            
+            if sums < target:
+                for i in range(len(nums)):
+                    if sums + nums[i] <= target:
+                        path.append(nums[i])
+                        backtrack(nums[i:], sums + nums[i], path)
+                        path.pop()
+                    
+            
+        candidates = sorted(candidates, reverse=True)
+        res = []
+        backtrack(candidates, 0, [])
+        
+        return res
