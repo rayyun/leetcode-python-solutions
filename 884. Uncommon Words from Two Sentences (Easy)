@@ -1,0 +1,15 @@
+# https://leetcode.com/problems/uncommon-words-from-two-sentences/
+
+# O(m+n) / O(m+n)
+from collections import Counter
+
+class Solution:
+    def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:
+        seen = set()
+        
+        s1 = s1.split(' ')
+        s2 = s2.split(' ')
+        
+        word_count = Counter(s1 + s2)
+        
+        return [word for word, count in word_count.items() if count == 1]
