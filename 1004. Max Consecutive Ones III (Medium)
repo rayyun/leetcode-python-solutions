@@ -1,0 +1,63 @@
+# https://leetcode.com/problems/max-consecutive-ones-iii/
+
+# Solution 1
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        p1 = 0
+        zeros = deque([])
+        max_length = 0
+        
+        for idx, num in enumerate(nums):
+            if num == 0:
+                if k == 0:
+                    p1 = idx + 1
+                    continue
+                elif len(zeros) == k and p1 <= zeros[0]:
+                    p1 = zeros.popleft() + 1
+                    
+                zeros.append(idx)
+            
+            max_length = max(max_length, idx - p1 + 1)
+            
+        return max_length
+        
+        
+        
+# Solution 2 - Sliding Window
+# O(n) / O(1)
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        left = 0
+        
+        for right in range(len(nums)):
+            k = k - 1 + nums[right]
+            
+            if k < 0:
+                k = k + 1 - nums[left]
+                left += 1
+                
+        return right - left + 1
+        
+        
+# Solution 3        
+# O(n) / O(1)
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        left = 0
+        res = 0
+        
+        for right in range(len(nums)):
+            if nums[right] == 0:
+                if k == 0:
+                    while nums[left] != 0:
+                        left += 1
+                    left += 1
+                else:
+                    k -= 1
+                    
+            res = max(res, right - left + 1)
+            
+        return res
