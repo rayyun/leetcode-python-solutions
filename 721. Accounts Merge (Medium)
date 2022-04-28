@@ -49,3 +49,47 @@ class Solution:
             
         
         return [[accounts[owner_idx][0]] + sorted(emails) for owner_idx, emails in res.items()]
+
+
+
+# Solution 2 - DFS
+# O(NKlogNK) / O(NK)  -  N : number of accounts, K : maximum length of an account
+from collections import defaultdict
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        email_owner = dict()
+        email_graph = defaultdict(set)
+        
+        for account in accounts:
+            name = account[0]
+            first_email = account[1]
+            
+            for email in account[1:]:
+                email_owner[email] = name
+                
+                email_graph[first_email].add(email)
+                email_graph[email].add(first_email)
+                
+        
+        seen = set()
+        res = []
+        
+        for email in email_graph:
+            if email not in seen:
+                seen.add(email)
+                stack = [email]
+                emails = []
+                
+                while stack:
+                    node = stack.pop()
+                    emails.append(node)
+                    
+                    for neighbor in email_graph[node]:
+                        if neighbor not in seen:
+                            seen.add(neighbor)
+                            stack.append(neighbor)
+                            
+                res.append([email_owner[email]] + sorted(emails))
+                
+        return res
