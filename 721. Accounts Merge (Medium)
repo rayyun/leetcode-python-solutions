@@ -1,0 +1,51 @@
+# https://leetcode.com/problems/accounts-merge/
+
+# Solution 1 - Union Find
+# O(NKlogNK) / O(NK)  -  N : number of accounts, K : maximum length of an account
+from collections import defaultdict
+
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        def find(x):
+            if root[x] != x:
+                root[x] = find(root[x])
+                
+            return root[x]
+            
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+            
+            if rootX != rootY:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootX] < rank[rootY]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+            
+            
+        N = len(accounts)    
+            
+        root = [i for i in range(N)]    
+        rank = [0] * N
+        
+        email_owner = dict()
+        
+        for idx, emails in enumerate(accounts):
+            for email in emails[1:]:
+                if email in email_owner:
+                    union(email_owner[email], idx)
+                    
+                email_owner[email] = idx
+                
+                
+        res = defaultdict(list)
+        
+        for email, owner_idx in email_owner.items():
+            root_owner = find(owner_idx)
+            res[root_owner].append(email)
+            
+        
+        return [[accounts[owner_idx][0]] + sorted(emails) for owner_idx, emails in res.items()]
