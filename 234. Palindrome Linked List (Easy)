@@ -36,12 +36,14 @@ class Solution:
             prev, curr = curr, next
         
         # prev --> head of reversed second half
+        reversedHead = prev
         
-        # compare the two half
-        while head and prev:
-            if head.val != prev.val:
+        # compare the two half        
+        while head and reversedHead:
+            if head.val != reversedHead.val:
                 return False
+        
             head = head.next
-            prev = prev.next
+            reversedHead = reversedHead.next
         
         return True
