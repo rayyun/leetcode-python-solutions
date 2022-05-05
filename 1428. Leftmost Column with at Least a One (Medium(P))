@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/leftmost-column-with-at-least-a-one/
+
+# Solution 1 - Binary search in each row
+# O(N log M) / O(1)
+class Solution:
+    def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
+        R, C = binaryMatrix.dimensions()
+        
+        smallest_index = C
+        
+        for row in range(R):
+            left, right = 0, C - 1
+            
+            while left < right:
+                mid = (left + right) // 2
+                
+                if binaryMatrix.get(row, mid) == 0:
+                    left = mid + 1
+                else:
+                    right = mid
+                    
+            if binaryMatrix.get(row, left) == 1:
+                smallest_index = min(smallest_index, left)
+            
+        return -1 if smallest_index == C else smallest_index
+        
+        
+        
+# Solution 2 - Start at Top Right, only move left and down
+# O(N+M) / O(1)
+class Solution:
+    def leftMostColumnWithOne(self, binaryMatrix: 'BinaryMatrix') -> int:
+        R, C = binaryMatrix.dimensions()
+        
+        curr_row, curr_col = 0, C - 1
+        
+        while 0 <= curr_row < R and 0 <= curr_col < C:
+            if binaryMatrix.get(curr_row, curr_col) == 0:
+                curr_row += 1
+            else:
+                curr_col -= 1
+                
+        return curr_col + 1 if curr_col != C-1 else -1
