@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/permutations-ii/
 
-# # O(∑ k=1~N  P(N,k)) / O(N)  - P(N,k)= N!/(N−k)! = N(N−1)...(N−k+1) 
+# O(∑ k=1~N  P(N,k)) / O(N)  - P(N,k)= N!/(N−k)! = N(N−1)...(N−k+1) 
 from collections import Counter
 
 class Solution:
