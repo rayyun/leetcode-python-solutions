@@ -1,0 +1,55 @@
+# https://leetcode.com/problems/shortest-word-distance-ii/
+
+# Solution 1
+# O(n) / O(n)
+from collections import defaultdict
+
+class WordDistance:
+
+    def __init__(self, wordsDict: List[str]):
+        self.wordsIndex = defaultdict(list)
+        
+        for idx, word in enumerate(wordsDict):
+            self.wordsIndex[word].append(idx)
+        
+
+    def shortest(self, word1: str, word2: str) -> int:
+        minDistance = abs(self.wordsIndex[word1][0] - self.wordsIndex[word2][0])
+        
+        for idx1 in self.wordsIndex[word1]:
+            for idx2 in self.wordsIndex[word2]:
+                if abs(idx1 - idx2) < minDistance:
+                    minDistance = abs(idx1 - idx2)
+                    
+        return minDistance
+
+
+# Solution 2
+# O(n) / O(n)
+from collections import defaultdict
+
+class WordDistance:
+
+    def __init__(self, wordsDict: List[str]):
+        self.wordsIndex = defaultdict(list)
+        
+        for idx, word in enumerate(wordsDict):
+            self.wordsIndex[word].append(idx)
+        
+
+    def shortest(self, word1: str, word2: str) -> int:
+        word1_index = self.wordsIndex[word1]
+        word2_index = self.wordsIndex[word2]
+        
+        idx1, idx2 = 0, 0
+        min_distance = float('inf')
+        
+        while idx1 < len(word1_index) and idx2 < len(word2_index):
+            min_distance = min(min_distance, abs(word1_index[idx1] - word2_index[idx2]))
+            
+            if word1_index[idx1] < word2_index[idx2]:
+                idx1 += 1
+            else:
+                idx2 += 1
+                
+        return min_distance
