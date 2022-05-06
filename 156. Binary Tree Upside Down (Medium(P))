@@ -1,0 +1,39 @@
+# https://leetcode.com/problems/binary-tree-upside-down/
+
+# Solution 1 - Iterative
+# O(n) / O(1)
+class Solution:
+    def upsideDownBinaryTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        curr, prev, prev_right = root, None, None
+        
+        while curr:
+            temp_left, temp_right = curr.left, curr.right
+            
+            curr.left, curr.right = prev_right, prev
+            curr, prev, prev_right = temp_left, curr, temp_right
+            
+        return prev
+        
+        
+# Solution 2 - DFS(Recursion)
+# O(n) / O(1)
+class Solution:
+    def upsideDownBinaryTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def dfs(curr, parent):
+            newRoot = curr
+            
+            if curr.left:
+                newRoot = dfs(curr.left, curr)
+            
+            if parent:
+                curr.left = parent.right
+                curr.right = parent
+                parent.left = None
+                parent.right = None
+                
+            return newRoot
+            
+        if not root:
+            return
+
+        return dfs(root, None)
