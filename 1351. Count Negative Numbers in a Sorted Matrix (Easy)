@@ -1,0 +1,42 @@
+# https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/
+
+# Solution 1 - start from top-right
+# O(n+m) / O(1)
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+        
+        res = 0
+        r, c = 0, C - 1
+        
+        while 0 <= r < R and 0 <= c < C:
+            if grid[r][c] >= 0:
+                r += 1
+            else:
+                res += R - r
+                c -= 1
+        
+        return res
+        
+        
+        
+# Solution 2 - Binary Search
+# O(n log m) / O(1)
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        res = 0
+
+        for row in grid:
+            left, right = 0, len(row) 
+            
+            while left < right:
+                mid = left + (right - left) // 2
+                
+                if row[mid] >= 0:
+                    left = mid + 1
+                else:
+                    right = mid
+                    
+            res += len(row) - left
+        
+        return res
