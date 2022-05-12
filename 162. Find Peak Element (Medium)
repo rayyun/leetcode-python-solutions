@@ -1,0 +1,32 @@
+# https://leetcode.com/problems/find-peak-element/
+
+# Solution 1 - Linear Search
+# O(n) / O(1)
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        peak_value, peak_index = float('-inf'), 0
+        
+        for idx, num in enumerate(nums):
+            if num > peak_value:
+                peak_value = num
+                peak_index = idx
+        
+        return peak_index
+        
+        
+        
+# Solution 2 - Binary Search
+# O(log n) / O(1)
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+        
+        while left < right:
+            mid = (left + right) // 2
+            
+            if nums[mid] > nums[mid+1]:
+                right = mid
+            else:
+                left = mid + 1
+                
+        return left
