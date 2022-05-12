@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/
 
-# Solution 1 - start from top-right
+# Solution 1 - Start at top-right
 # O(n+m) / O(1)
 class Solution:
     def countNegatives(self, grid: List[List[int]]) -> int:
