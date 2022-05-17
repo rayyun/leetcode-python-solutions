@@ -1,0 +1,15 @@
+# https://leetcode.com/problems/group-shifted-strings/
+
+# O(n*k) / O(n*k)  - n: length of strings, k : max length of a string in strings
+class Solution:
+    def groupStrings(self, strings: List[str]) -> List[List[str]]:
+        hash_map = collections.defaultdict(list)        
+        
+        for string in strings:
+            hash_key = []
+            for a_char, b_char in zip(string, string[1:]):
+                hash_key.append(chr((ord(b_char) - ord(a_char)) % 26 + ord('a')))
+            
+            hash_map[''.join(hash_key)].append(string)
+            
+        return list(hash_map.values())
