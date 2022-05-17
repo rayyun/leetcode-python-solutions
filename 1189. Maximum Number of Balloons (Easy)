@@ -1,5 +1,6 @@
 # https://leetcode.com/problems/maximum-number-of-balloons/
 
+# Solution 1
 # O(n) / O(1)
 class Solution:
     def maxNumberOfBalloons(self, text: str) -> int:
@@ -13,3 +14,12 @@ class Solution:
                 res = min(res, text_counter[char])
                 
         return res
+
+
+# Solution 2 - more simple
+# O(n) / O(1)
+class Solution:
+    def maxNumberOfBalloons(self, text: str) -> int:
+        t_counter = collections.Counter(text)
+        
+        return min(t_counter['b'], t_counter['a'], t_counter['l']//2, t_counter['o']//2, t_counter['n'])
