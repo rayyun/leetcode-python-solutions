@@ -4,22 +4,17 @@
 # O(n log n) / O(n)
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
-        if not intervals:
-            return 0
-        
-        rooms = []
-        
+        rooms = []        
         intervals.sort()
         
-        heapq.heappush(rooms, intervals[0][1])
-        
-        for start_time, end_time in intervals[1:]:
-            if start_time >= rooms[0]:
+        for start_time, end_time in intervals:
+            if rooms and start_time >= rooms[0]:
                 heapq.heappop(rooms)
                 
             heapq.heappush(rooms, end_time)
             
         return len(rooms)
+
         
         
 # Solution 2 - Chronological Ordering
