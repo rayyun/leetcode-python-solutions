@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/meeting-rooms-ii/
+
+# Solution 1 - Heap
+# O(n log n) / O(n)
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+        
+        rooms = []
+        
+        intervals.sort()
+        
+        heapq.heappush(rooms, intervals[0][1])
+        
+        for start_time, end_time in intervals[1:]:
+            if start_time >= rooms[0]:
+                heapq.heappop(rooms)
+                
+            heapq.heappush(rooms, end_time)
+            
+        return len(rooms)
+        
+        
+# Solution 2 - Chronological Ordering
+# O(n log n) / O(n)
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        start = sorted([s_time for s_time, e_time in intervals])
+        end = sorted([e_time for s_time, e_time in intervals])
+        
+        s_point, e_point = 0, 0
+        rooms = 0
+        
+        while s_point < len(start):
+            if start[s_point] >= end[e_point]:
+                rooms -= 1
+                e_point += 1
+            
+            rooms += 1
+            s_point += 1
+            
+        return rooms
