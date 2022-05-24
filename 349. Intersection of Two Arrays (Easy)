@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/intersection-of-two-arrays/
 
-# O(n) / O(n)
+# O(n+m) / O(n)
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
         res = set()
