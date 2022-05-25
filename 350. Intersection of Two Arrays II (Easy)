@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/intersection-of-two-arrays-ii/
+
+# O(n+m) / O(n+m)
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        def find(dict1, dict2):
+            
+            for num, count in dict1.items():
+                if num in dict2:
+                    res.extend([num] * min(count, dict2[num]))
+            
+        n1_counter = collections.Counter(nums1)
+        n2_counter = collections.Counter(nums2)
+        
+        res = []
+        
+        if len(n1_counter) <= len(n2_counter):
+            find(n1_counter, n2_counter)
+        else:
+            find(n2_counter, n1_counter)
+        
+        return res
