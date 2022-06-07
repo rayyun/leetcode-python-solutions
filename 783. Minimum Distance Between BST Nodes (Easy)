@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/minimum-distance-between-bst-nodes/
+
+# O(n) / O(h)
+class Solution:
+    def minDiffInBST(self, root: Optional[TreeNode]) -> int:
+        def dfs(node):
+            if node:
+                dfs(node.left)
+                self.minDiff = min(self.minDiff, node.val - self.prev_val)
+                self.prev_val = node.val                
+                dfs(node.right)
+                
+        
+        self.prev_val = float('-inf')
+        self.minDiff = float('inf')
+        
+        dfs(root)
+        
+        return self.minDiff
