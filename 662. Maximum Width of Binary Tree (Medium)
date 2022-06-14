@@ -1,0 +1,52 @@
+# https://leetcode.com/problems/maximum-width-of-binary-tree/
+
+# Solution 1 - BFS
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def widthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        max_width = 1
+        queue = deque([(root, 0)])
+        
+        while queue:
+            level_length = len(queue)
+            min_col, max_col = queue[0][1], queue[-1][1]
+            max_width = max(max_width, max_col - min_col + 1)
+            
+            for _ in range(level_length):            
+                node, column = queue.popleft()
+                
+                if node.left:
+                    queue.append((node.left, column * 2))
+                if node.right:
+                    queue.append((node.right, column * 2 + 1))
+            
+        return max_width
+        
+        
+        
+# Solution 2 - DFS
+# O(n) / O(n)
+class Solution:
+    def widthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        def dfs(node, level, column):
+            nonlocal max_width
+            
+            if not node:
+                return
+            
+            if level not in first_col_level:
+                first_col_level[level] = column
+                
+            max_width = max(max_width, column - first_col_level[level] + 1)
+            
+            dfs(node.left, level + 1, column * 2)
+            dfs(node.right, level + 1, column * 2 + 1)
+                    
+        
+        first_col_level = {}
+        max_width = 0
+        dfs(root, 0, 0)
+        
+        return max_width
