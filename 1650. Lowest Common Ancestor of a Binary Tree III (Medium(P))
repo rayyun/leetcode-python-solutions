@@ -1,0 +1,18 @@
+# https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iii/
+
+# O(n) / O(n)
+class Solution:
+    def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
+        ancestors = set()
+        
+        while p:
+            if p == q:
+                return p
+            
+            ancestors.add(p)
+            p = p.parent
+            
+        while q not in ancestors:
+            q = q.parent
+            
+        return q
