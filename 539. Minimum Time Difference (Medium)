@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/minimum-time-difference/
+
+# O(n log n) / O(n)
+class Solution:
+    def findMinDifference(self, timePoints: List[str]) -> int:
+        time_mins = []
+        
+        for tp in timePoints:
+            hour, minute = map(int, tp.split(':'))
+            time_mins.append(hour * 60 + minute)
+            
+        time_mins.sort()
+        
+        min_gap = 1440 + time_mins[0] - time_mins[-1]
+        
+        for i in range(len(time_mins) - 1):
+            min_gap = min(min_gap, time_mins[i+1] - time_mins[i])
+            
+        return min_gap
