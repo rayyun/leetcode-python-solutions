@@ -1,0 +1,36 @@
+# https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+# Solution 1 - Resursion
+# O(n) / O(n) 
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        def dfs(node):
+            if node:
+                parent_val = node.val
+                
+                if parent_val > p.val and parent_val > q.val:
+                    return dfs(node.left)
+                elif parent_val < p.val and parent_val < q.val:
+                    return dfs(node.right)
+                else:
+                    return node
+                
+        return dfs(root)
+        
+        
+        
+# Solution 2 - Iterative
+# O(n) / O(1)
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        node = root
+        
+        while node:
+            parent_val = node.val
+            
+            if parent_val > p.val and parent_val > q.val:
+                node = node.left
+            elif parent_val < p.val and parent_val < q.val:
+                node = node.right
+            else:
+                return node
