@@ -1,0 +1,24 @@
+# https://leetcode.com/problems/longest-mountain-in-array/
+
+# O(n) / O(1)
+class Solution:
+    def longestMountain(self, arr: List[int]) -> int:
+        N = len(arr)
+        longest, left = 0, 0
+        
+        while left < N:
+            right = left
+            
+            if right + 1 < N and arr[right] < arr[right+1]:  # uphill
+                while right + 1 < N and arr[right] < arr[right+1]:  # up the hill until the peak & find the peak
+                    right += 1
+                
+                if right + 1 < N and arr[right] > arr[right+1]:  # downhill
+                    while right + 1 < N and arr[right] > arr[right+1]:  # down the hill until the base of the mountain
+                        right += 1
+                        
+                    longest = max(longest, right - left + 1)
+                    
+            left = max(right, left + 1)
+            
+        return longest
