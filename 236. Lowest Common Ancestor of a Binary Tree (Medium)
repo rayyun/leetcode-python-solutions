@@ -1,6 +1,5 @@
 # https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 
-# Solution #1. Recurtion - O(n) / O(n)
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
@@ -8,6 +7,7 @@
 #         self.left = None
 #         self.right = None
 
+# Solution #1. Recurtion - O(n) / O(n)
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         def recursive(node):
