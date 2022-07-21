@@ -39,3 +39,24 @@ class Solution:
             num2_map[stack.pop()] = -1
             
         return [num2_map[num] for num in nums1]
+
+
+# Solution 3 - Stack (from back)
+# O(n) / O(n)
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        stack = []
+        num_map = {}
+        
+        for num in nums2[::-1]:
+            while stack and stack[-1] < num:
+                stack.pop()
+                
+            if stack:
+                num_map[num] = stack[-1]
+            else:
+                num_map[num] = -1
+            
+            stack.append(num)
+            
+        return [num_map[num] for num in nums1]
