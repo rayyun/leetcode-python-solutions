@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/contains-duplicate/
+
+# Solution 1 
+# O(n) / O(n)
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        seen = set()
+        
+        for num in nums:
+            if num in seen:
+                return True
+            
+            seen.add(num)
+            
+        return False    
+    
+
+# Solution 2
+# O(n) / O(n)    
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        return len(nums) != len(set(nums))
