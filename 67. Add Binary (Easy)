@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/add-binary/
+
+# O(max(n, m)) / O(max(n, m))
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        N = max(len(a), len(b))
+        a = a.zfill(N)[::-1]
+        b = b.zfill(N)[::-1]
+        res = []
+        carry = 0
+        
+        for a_num, b_num in zip(a, b):
+            carry, val = divmod(carry + int(a_num) + int(b_num), 2)
+            res.append(str(val))
+        
+        if carry:
+            res.append(str(carry))
+            
+        return ''.join(res[::-1])
