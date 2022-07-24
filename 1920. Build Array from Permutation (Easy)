@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/build-array-from-permutation/
+
+# Solution 1
+# O(n) / O(n)
+class Solution:
+    def buildArray(self, nums: List[int]) -> List[int]:
+        return [nums[nums[i]] for i in range(len(nums))]
+        
+        
+        
+# Solution 2 - Inplace
+# O(n) / O(1)
+class Solution:
+    def buildArray(self, nums: List[int]) -> List[int]:
+        N = len(nums)
+        
+        for i in range(N):
+            org_val = nums[i]
+            new_val = nums[nums[i]] % N
+            
+            nums[i] = N * new_val + org_val
+            
+        for i in range(N):
+            nums[i] //= N
+            
+        return nums
+
