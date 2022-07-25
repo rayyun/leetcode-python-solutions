@@ -1,0 +1,24 @@
+# https://leetcode.com/problems/target-sum/
+
+# O(t*n) / O(t*n) - t : sum of the nums
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        def dfs(currSum, nums):
+            key = (currSum, tuple(nums))
+            
+            if key in seen:
+                return seen[key]
+            
+            if not nums:
+                if currSum == target:
+                    return 1
+                else:
+                    return 0
+            
+            res = dfs(currSum - nums[0], nums[1:]) + dfs(currSum + nums[0], nums[1:])
+            seen[key] = res
+            
+            return res
+
+        seen = dict()
+        return dfs(0, nums)
