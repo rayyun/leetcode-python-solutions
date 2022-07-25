@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/house-robber-ii/
+
+# Solution 1 - DP (1d array)
+# O(n) / O(n)
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        def max_rob(nums):
+            dp = [0 for _ in range(len(nums))]
+            dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+            
+            for i in range(2, len(nums)):
+                dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+            
+            return dp[-1]
+        
+        N = len(nums)
+        if N <= 2:
+            return max(nums)
+        
+        return max(max_rob(nums[:N-1]), max_rob(nums[1:]))
+        
+        
+# Solution 2 - DP (O(1) Space Complexity)
+# O(n) / O(1)
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        def max_rob(nums):
+            t1, t2 = nums[0], max(nums[0], nums[1])
+            
+            for i in range(2, len(nums)):
+                t1, t2 = t2, max(t2, t1 + nums[i])
+                
+            return t2
+            
+            
+        N = len(nums)
+        
+        if N <= 2:
+            return max(nums)
+        
+        return max(max_rob(nums[:N-1]), max_rob(nums[1:]))
