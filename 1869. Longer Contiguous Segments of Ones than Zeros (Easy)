@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/longer-contiguous-segments-of-ones-than-zeros/
+
+# O(n) / O(1)? O(n)?
+class Solution:
+    def checkZeroOnes(self, s: str) -> bool:
+        max_cont = [0, 0]
+        curr_len = [0, 0]
+        
+        max_cont[int(s[0])] += 1
+        curr_len[int(s[0])] += 1
+            
+        for num in map(int, s[1:]):
+            if curr_len[num] == 0:
+                curr_len[not num] = 0
+
+            curr_len[num] += 1
+            max_cont[num] = max(max_cont[num], curr_len[num])
+
+        return max_cont[1] > max_cont[0]
