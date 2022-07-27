@@ -1,0 +1,59 @@
+# https://leetcode.com/problems/merge-k-sorted-lists/
+
+# Solution 1 - Brute Force
+# O(n log n) / O(n) - n : number of all ListNodes
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        vals = []
+        
+        for node in lists:
+            while node:
+                vals.append(node.val)
+                node = node.next
+                
+        vals.sort()
+        
+        dummy = curr = ListNode()
+        
+        for num in vals:
+            node = ListNode(num)
+            curr.next = node
+            curr = curr.next
+            
+        return dummy.next
+        
+        
+        
+# Solution 2 - Divide and Conquer(merge)
+# O(n log k) / O(1) - n : number of all ListNodes, k : number of Linked Lists
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        def mergeTwo(l1, l2):
+            dummy = curr = ListNode()
+            
+            while l1 and l2:            
+                if l1.val <= l2.val:
+                    curr.next = l1
+                    l1 = l1.next
+                else:
+                    curr.next = l2
+                    l2 = l2.next
+                
+                curr = curr.next
+                
+            if l1:  curr.next = l1            
+            if l2:  curr.next = l2
+                
+            return dummy.next
+        
+        if len(lists) == 0:
+            return
+        
+        if len(lists) == 1:
+            return lists[0]
+        
+        mid = len(lists) // 2
+        left = self.mergeKLists(lists[:mid])
+        right = self.mergeKLists(lists[mid:])
+        
+        return mergeTwo(left, right)
