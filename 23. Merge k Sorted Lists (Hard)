@@ -57,3 +57,34 @@ class Solution:
         right = self.mergeKLists(lists[mid:])
         
         return mergeTwo(left, right)
+
+
+# Solution 3 - Heap
+# O(n log k) / O(n) - k : number of linked lists
+import heapq
+
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        heap = []
+        
+        count = 0
+        for node in lists:
+            if node:
+                heap.append((node.val, count, node))
+                count += 1
+        
+        heapq.heapify(heap)
+        
+        dummy = curr = ListNode()
+        
+        while heap:
+            val, _, node = heapq.heappop(heap)
+            curr.next = node
+            curr = curr.next
+            
+            if node.next:
+                heapq.heappush(heap, (node.next.val, count, node.next))
+                
+            count += 1
+        
+        return dummy.next
