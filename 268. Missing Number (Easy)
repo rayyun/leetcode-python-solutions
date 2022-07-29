@@ -1,0 +1,20 @@
+# https://leetcode.com/problems/missing-number/
+
+# Solution 1 - Hash Set
+# O(n) / O(n)
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        nums = set(nums)
+        
+        for i in range(len(nums) + 1):
+            if i not in nums:
+                return i
+                
+                
+# Solution 2 - Math
+# O(n) / O(1)
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        N = len(nums)
+        
+        return int((N * (N+1)) / 2 - sum(nums))
