@@ -36,3 +36,18 @@ class Solution:
                 break
                 
         return min_len
+
+
+# Solution 3 - Vertical scanning
+# O(len(chars)) / O(1)
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        prefix = ''
+        
+        for word in zip(*strs):
+            if len(set(word)) == 1:
+                prefix += word[0]
+            else:
+                break
+        
+        return prefix
