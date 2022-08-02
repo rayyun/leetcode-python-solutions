@@ -1,0 +1,37 @@
+# https://leetcode.com/problems/swap-nodes-in-pairs/
+
+# Solution 1 - Iterative
+# O(n) / O(1)
+class Solution:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = prev = ListNode()
+        dummy.next = curr = head
+        
+        while curr and curr.next:
+            first = curr
+            second = curr.next
+            
+            first.next = second.next
+            second.next = first
+            prev.next = second
+            
+            curr = curr.next
+            prev = prev.next.next
+            
+        return dummy.next
+        
+        
+# Solution 2 - Recursion
+# O(n) / O(n)
+class Solution:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        
+        first = head
+        second = head.next
+        
+        first.next = self.swapPairs(second.next)
+        second.next = first
+        
+        return second
