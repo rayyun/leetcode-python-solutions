@@ -1,0 +1,44 @@
+# https://leetcode.com/problems/k-diff-pairs-in-an-array/
+
+# Solution 1 - Hash map
+# O(n) / O(n)
+from collections import Counter
+
+class Solution:
+    def findPairs(self, nums: List[int], k: int) -> int:
+        nums_counter = Counter(nums)
+        res = 0
+        
+        for num, count in nums_counter.items():
+            if k == 0 and count >= 2:
+                res += 1
+            elif k > 0 and num + k in nums_counter:
+                res += 1
+                
+        return res
+
+
+
+# Solution 2 - Two Pointer
+# O(n log n) / O(n)
+class Solution:
+    def findPairs(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        
+        N = len(nums)
+        left, right = 0, 1
+        res = 0
+        
+        while left < N and right < N:
+            if left == right or nums[right] - nums[left] < k:
+                right += 1
+            elif nums[right] - nums[left] > k:
+                left += 1
+            else:
+                res += 1
+                left += 1
+                
+                while left < N and nums[left] == nums[left - 1]:
+                    left += 1
+        
+        return res
