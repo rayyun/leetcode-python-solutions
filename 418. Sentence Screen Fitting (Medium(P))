@@ -1,0 +1,21 @@
+# 418. Sentence Screen Fitting
+
+# O(r * max_len(sentence)) / O(1)?
+class Solution:
+    def wordsTyping(self, sentence: List[str], rows: int, cols: int) -> int:
+        total_s = ' '.join(sentence) + ' '
+        total_l = len(total_s)
+        pointer = 0
+        
+        for _ in range(rows):
+            pointer += cols
+            
+            if total_s[pointer % total_l] == ' ':
+                pointer += 1
+            else:
+                while pointer >= 0 and total_s[pointer % total_l] != ' ':
+                    pointer -= 1
+                    
+                pointer += 1
+        
+        return pointer // total_l
