@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/ones-and-zeroes/
+
+# O(l * m * n) / O(m * n) - l: len(strs)
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        dp = [[0] * (n + 1) for _ in range(m+1)]
+        
+        for num in strs:
+            zeros = num.count('0')
+            ones = num.count('1')
+            
+            if zeros > m or ones > n:
+                continue
+                
+            for i in range(m, zeros - 1, -1):
+                for j in range(n, ones - 1, -1):
+                    dp[i][j] = max(dp[i - zeros][j - ones] + 1, dp[i][j])
+                    
+        return dp[-1][-1]
