@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/subsets-ii/
+
+# O(n 2^n) / O(n)
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        def dfs(index, path, res):
+            res.append(path)
+            
+            for i in range(index, len(nums)):
+                if i > index and nums[i] == nums[i - 1]:
+                    continue
+                else:
+                    dfs(i + 1, path + [nums[i]], res)
+        
+        nums.sort()
+        res = []
+        dfs(0, [], res)
+        
+        return res
