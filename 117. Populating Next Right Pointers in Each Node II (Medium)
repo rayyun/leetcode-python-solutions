@@ -9,6 +9,9 @@ class Node:
         self.right = right
         self.next = next
 """
+
+
+# Solution 1 - BFS (Level Order)
 # O(n) / O(n)
 from collections import deque
 
@@ -33,4 +36,30 @@ class Solution:
                 if node.right:
                     queue.append(node.right)
         
+        return root
+        
+        
+
+# Solution 2 - BFS - level by level with dummy head(for child level)
+# O(n) / O(1)
+class Solution:
+    def connect(self, root: 'Node') -> 'Node': 
+        dummy = child = Node(0)
+        node = root
+        
+        while node:
+            child.next = node.left
+            if child.next:
+                child = child.next
+            
+            child.next = node.right
+            if child.next:
+                child = child.next
+                
+            node = node.next
+            
+            if not node:
+                child = dummy
+                node = dummy.next
+                
         return root
