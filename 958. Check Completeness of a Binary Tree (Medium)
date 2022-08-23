@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/check-completeness-of-a-binary-tree/
+
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
+        queue = deque([root])
+        prev_node = root
+        
+        while queue:
+            curr_node = queue.popleft()
+            
+            if curr_node:
+                if not prev_node:
+                    return False
+                
+                queue.append(curr_node.left)
+                queue.append(curr_node.right)
+                
+            prev_node = curr_node
+            
+        return True
