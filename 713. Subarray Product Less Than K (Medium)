@@ -1,0 +1,26 @@
+# https://leetcode.com/problems/subarray-product-less-than-k/
+
+# O(n) / O(1)
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        if k <= 1:    # less than k 이므로, k <= 1!  k=1 이어도, less than 1 은 없음. 그래서 0
+            return 0
+        
+        res = 0
+        product = 1
+        left = 0
+        
+        for right, val in enumerate(nums):
+            product *= val
+            
+            while product >= k:
+                product /= nums[left]
+                left += 1
+            
+            res += right - left + 1    
+            """ 
+            [2, 3]  이라면, [0,3], [3] 2개가 추가됨. 그래서 gap(right-left) (여기선 1) 에 +1 을 
+            한 값을 더해줌.
+            [1, 2, 3] 이라면 [1,2,3], [2,3], [3] 3개.  gap(2) + 1 = 3
+            """ 
+        return res
