@@ -1,0 +1,29 @@
+# https://leetcode.com/problems/01-matrix/
+
+# O(r*c) / O(r*c)
+from collections import deque
+
+class Solution:
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        queue = deque([])        
+        R, C = len(mat), len(mat[0])
+        dirs = ((0, -1), (-1, 0), (0, 1), (1, 0))
+        
+        for r in range(R):
+            for c in range(C):
+                if mat[r][c] == 1:
+                    mat[r][c] = -1
+                else:
+                    queue.append((r, c))
+                    
+        while queue:
+            r, c = queue.popleft()
+            
+            for x, y in dirs:
+                new_r, new_c = r + x, c + y
+                
+                if 0 <= new_r < R and 0 <= new_c < C and mat[new_r][new_c] == -1:
+                    mat[new_r][new_c] = mat[r][c] + 1
+                    queue.append((new_r, new_c))
+                    
+        return mat
