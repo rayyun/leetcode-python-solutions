@@ -1,0 +1,33 @@
+# https://leetcode.com/problems/next-greater-element-iii/
+
+# O(n) / O(n)
+class Solution:
+    def nextGreaterElement(self, n: int) -> int:
+        if n <= 1:
+            return -1
+        
+        nums = list(str(n))
+        left = right = len(nums) - 1
+        
+        while left > 0 and nums[left] <= nums[left-1]:
+            left -= 1
+            
+        if left == 0:
+            return -1
+        
+        pivot = left - 1
+        
+        while nums[pivot] >= nums[right]:
+            right -= 1
+            
+        nums[pivot], nums[right] = nums[right], nums[pivot]
+        
+        left, right = pivot + 1, len(nums) - 1
+        
+        while left < right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+        
+        result = int(''.join(nums))
+        return result if result < 2**31 else -1
