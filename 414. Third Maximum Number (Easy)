@@ -1,0 +1,14 @@
+# https://leetcode.com/problems/third-maximum-number/
+
+# O(n) / O(1)
+class Solution:
+    def thirdMax(self, nums: List[int]) -> int:
+        max_three = set()
+        
+        for num in set(nums):
+            max_three.add(num)
+            
+            if len(max_three) > 3:
+                max_three.remove(min(max_three))
+        
+        return min(max_three) if len(max_three) == 3 else max(max_three)
