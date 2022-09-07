@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
+
+# O(n) / O(n)
+class Solution:
+    def maxSubArrayLen(self, nums: List[int], k: int) -> int:
+        sub_sum = 0
+        longest = 0
+        seen = dict()
+        
+        for idx, num in enumerate(nums):
+            sub_sum += num
+            
+            if sub_sum == k:
+                longest = idx + 1
+            
+            if sub_sum - k in seen:
+                longest = max(longest, idx - seen[sub_sum - k])
+            
+            if sub_sum not in seen:
+                seen[sub_sum] = idx
+                
+        return longest
