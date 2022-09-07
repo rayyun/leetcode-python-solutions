@@ -1,0 +1,32 @@
+# https://leetcode.com/problems/subtree-of-another-tree/
+
+# O(n) / O(n)
+class Solution:
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        def is_same(node1, node2):
+            if not node1 and not node2:
+                return True
+            
+            if (node1 and not node2) or (not node1 and node2) or node1.val != node2.val:
+                return False
+            
+            return node1.val == node2.val and is_same(node1.left, node2.left) and is_same(node1.right, node2.right)
+        
+        
+        stack = [root]
+        
+        while stack:
+            node = stack.pop()
+            
+            if node.val == subRoot.val:
+                if is_same(node, subRoot):
+                    return True
+            
+            if node.left:
+                stack.append(node.left)
+                
+            if node.right:
+                stack.append(node.right)
+                
+        return False
+        
