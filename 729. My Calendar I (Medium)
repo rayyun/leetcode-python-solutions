@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/my-calendar-i/
+
+# O(n log n) / O(n)
+class MyCalendar:
+
+    def __init__(self):
+        self.calendar = []
+        
+
+    def book(self, start: int, end: int) -> bool:
+        left = bisect.bisect_right(self.calendar, start)
+        
+        if left % 2:
+            return False
+        
+        right = bisect.bisect_left(self.calendar, end)
+        
+        if left != right:
+            return False
+        
+        self.calendar[left:left] = [start, end]
+        
+        return True
