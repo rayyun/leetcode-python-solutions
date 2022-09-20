@@ -1,0 +1,52 @@
+# https://leetcode.com/problems/reverse-words-in-a-string/
+
+# Solution 1 - Built-in function (split, reversed)
+# O(n) / O(n)
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return ' '.join(reversed(s.split()))
+        
+        
+        
+# Solution 2 - from back to front
+# O(n?) / O(n)
+# O(n) / O(n)
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        res = []
+        word = []
+        
+        for c in reversed(s):
+            if word and c == ' ':
+                res.append(''.join(word[::-1]))
+                word = []
+            elif c != ' ':
+                word.append(c)
+        
+        if word:
+            res.append(''.join(word[::-1]))
+            
+        return ' '.join(res)
+        
+        
+        
+# Solution 3 - deque
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        queue = deque([])
+        word = []
+        
+        for c in s:
+            if word and c == ' ':
+                queue.appendleft(''.join(word))
+                word = []
+            elif c != ' ':
+                word.append(c)
+        
+        if word:
+            queue.appendleft(''.join(word))
+            
+        return ' '.join(queue)
