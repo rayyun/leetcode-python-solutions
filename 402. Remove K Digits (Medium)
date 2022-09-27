@@ -15,6 +15,6 @@ class Solution:
         for _ in range(k):
             stack.pop()
             
-        result = ''.join(stack).lstrip('0')
+        res = ''.join(stack).lstrip('0')
         
-        return result if len(result) > 0 else '0'
+        return res if len(res) > 0 else '0'
