@@ -1,0 +1,29 @@
+# https://leetcode.com/problems/combination-sum-ii/
+
+# O(2^n) / O(n)
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        def backtrack(index, path, remain):
+            if remain == 0:
+                res.append(path[:])
+                return
+            
+            for next_idx in range(index, len(candidates)):
+                if next_idx > index and candidates[next_idx] == candidates[next_idx - 1]:
+                    continue
+                
+                num = candidates[next_idx]
+                
+                if remain - num < 0:
+                    break
+                    
+                path.append(num)
+                backtrack(next_idx + 1, path, remain - num)
+                path.pop()
+                        
+        
+        candidates.sort()
+        res = []
+        backtrack(0, [], target)
+        
+        return res
