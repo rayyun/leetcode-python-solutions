@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/remove-duplicate-letters/
+
+# Solution 1 - stack, counter, hashset
+# O(n) / O(1)
+from collections import Counter
+
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        s_count = Counter(s)
+        seen = set()
+        stack = []
+        
+        for c in s:
+            if c not in seen:
+                while stack and c < stack[-1] and s_count[stack[-1]] >= 1:
+                    seen.remove(stack.pop())
+
+                stack.append(c)
+                seen.add(c)
+                
+            s_count[c] -= 1
+        
+        return ''.join(stack)
+        
+        
+        
+# Solution 2 - stack, hashset, last_index
+# O(n) / O(1)
+class Solution:
+    def removeDuplicateLetters(self, s: str) -> str:
+        stack = []
+        seen = set()
+        last_index = {c: i for i, c in enumerate(s)}
+        
+        for i, c in enumerate(s):
+            if c not in seen:
+                while stack and c < stack[-1] and i < last_index[stack[-1]]:
+                    seen.remove(stack.pop())
+
+                stack.append(c)
+                seen.add(c)
+        
+        return ''.join(stack)
