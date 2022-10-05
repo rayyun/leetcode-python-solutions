@@ -1,0 +1,25 @@
+# https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+
+# O(n) / O(k)
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        seen_index = dict()
+        
+        if len(s) == 0 or k == 0:
+            return 0
+        
+        left, right = 0, 0
+        max_length = 0
+        
+        while right < len(s):
+            seen_index[s[right]] = right
+            right += 1
+            
+            if len(seen_index) > k:
+                del_idx = min(seen_index.values())
+                del seen_index[s[del_idx]]
+                left = del_idx + 1
+                
+            max_length = max(max_length, right - left)
+            
+        return max_length
