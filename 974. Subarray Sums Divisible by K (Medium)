@@ -1,0 +1,67 @@
+# https://leetcode.com/problems/subarray-sums-divisible-by-k/
+
+# Solution 1 - Brute Force - TLE
+class Solution:
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+        res = 0
+        
+        for i in range(len(nums)):
+            subsum = 0
+            for j in range(i, len(nums)):
+                subsum += nums[j]
+                
+                if subsum % k == 0:
+                    res += 1
+        
+        return res
+        
+        
+        
+# Solution 2 - Prefix sum (list) + hash set
+# O(n) / O(n)
+class Solution:
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+        res = 0
+        seen = dict()
+        
+        prefix_sum = [0] * len(nums)
+        prefix_sum[0] = nums[0]
+        
+        for i in range(1, len(nums)):
+            prefix_sum[i] = prefix_sum[i-1] + nums[i]
+            
+        for num in prefix_sum:
+            remain = num % k
+            
+            if remain == 0:
+                res += 1
+            
+            if remain in seen:
+                res += seen[remain]
+                seen[remain] += 1
+            else:
+                seen[remain] = 1
+        
+        return res
+        
+        
+        
+# Solution 3 - Prefix sum + hash set
+from collections import defaultdict
+
+class Solution:
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+        seen = defaultdict(int)
+        seen[0] = 1
+        res, prefix_sum = 0, 0
+        
+        for num in nums:
+            prefix_sum += num
+            remain = prefix_sum % k
+            
+            if remain in seen:
+                res += seen[remain]
+            
+            seen[remain] += 1
+        
+        return res
