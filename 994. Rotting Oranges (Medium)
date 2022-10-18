@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/rotting-oranges/
+
+# O(nm) / O(nm)
+from collections import deque
+
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        queue = deque([])
+        minute = -1
+        fresh_oranges = 0
+        R, C = len(grid), len(grid[0])
+        
+        for r in range(R):
+            for c in range(C):
+                if grid[r][c] == 2:
+                    queue.append((r, c))
+                elif grid[r][c] == 1:
+                    fresh_oranges += 1
+                    
+        queue.append((-1, -1))
+        
+        dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        
+        while queue:
+            row, col = queue.popleft()
+            
+            if row == -1:
+                minute += 1
+                
+                if queue:
+                    queue.append((-1, -1))
+                    
+            else:
+                for r, c in dirs:
+                    new_row, new_col = row + r, col + c
+                    
+                    if 0 <= new_row < R and 0 <= new_col < C:
+                        if grid[new_row][new_col] == 1:
+                            queue.append((new_row, new_col))
+                            grid[new_row][new_col] = 2
+                            fresh_oranges -= 1
+                            
+        return minute if fresh_oranges == 0 else -1
