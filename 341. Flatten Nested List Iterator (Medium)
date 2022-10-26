@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/flatten-nested-list-iterator/
+
+"""
+N : total # of integers, L : total # of lists, D : maximum nesting depth
+- TC : O(N+L) for constructor / O(1) for next(), hasNext()
+- SC : O(N+D)
+"""
+class NestedIterator:
+    def __init__(self, nestedList: [NestedInteger]):
+        def flatten_list(nested_list):
+            for n_list in nested_list:
+                if n_list.isInteger():
+                    self._integers.append(n_list.getInteger())
+                else:
+                    flatten_list(n_list.getList())               
+                
+        self._integers = []
+        self._index = -1
+        flatten_list(nestedList)
+    
+    def next(self) -> int:
+        self._index += 1
+        return self._integers[self._index]
+        
+    
+    def hasNext(self) -> bool:
+        return self._index + 1 < len(self._integers)
