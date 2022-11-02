@@ -1,0 +1,17 @@
+# https://leetcode.com/problems/non-overlapping-intervals/
+
+# O(n log n) / O(1)
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+        prev = float('-inf')
+        res = 0
+        
+        for start, end in intervals:
+            if prev <= start:
+                prev = end
+            else:
+                res += 1
+                prev = min(prev, end)
+                
+        return res
