@@ -1,0 +1,13 @@
+# https://leetcode.com/problems/find-the-winner-of-the-circular-game/
+
+# O(n) / O(n)
+class Solution:
+    def findTheWinner(self, n: int, k: int) -> int:
+        circle = list(range(1, n+1))
+        
+        while len(circle) > 1:
+            index = (k - 1) % len(circle)
+            
+            circle = circle[index+1:] + circle[:index]
+            
+        return circle[0]
