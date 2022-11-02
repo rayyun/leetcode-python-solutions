@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/shortest-word-distance/
+
+# O(n) / O(1)
+class Solution:
+    def shortestDistance(self, wordsDict: List[str], word1: str, word2: str) -> int:
+        shortest = float('inf')
+        p1, p2 = -1, -1
+        
+        for i, word in enumerate(wordsDict):
+            if word == word1:
+                p1 = i
+            
+            if word == word2:
+                p2 = i
+                
+            if p1 != -1 and p2 != -1:
+                shortest = min(shortest, abs(p1 - p2))
+                
+        return shortest
