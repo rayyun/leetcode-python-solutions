@@ -1,0 +1,13 @@
+# https://leetcode.com/problems/sorting-the-sentence/
+
+# O(n) / O(n)
+class Solution:
+    def sortSentence(self, s: str) -> str:
+        sentence = s.split()
+        res = [''] * len(sentence)
+        
+        for w in sentence:
+            word, index = w[:-1], int(w[-1])
+            res[index-1] = word
+            
+        return ' '.join(res)
