@@ -1,0 +1,21 @@
+# https://leetcode.com/problems/maximize-distance-to-closest-person/
+
+# O(n) / O(1)
+class Solution:
+    def maxDistToClosest(self, seats: List[int]) -> int:
+        left = None
+        maxDist = 0
+        
+        for right in range(len(seats)):
+            if seats[right] == 1:
+                if left != None:
+                    maxDist = max(maxDist, (right-left)//2)
+                else:
+                    maxDist = max(maxDist, right)
+                
+                left = right
+                
+        if seats[-1] == 0:
+            maxDist = max(maxDist, right - left)
+            
+        return maxDist
