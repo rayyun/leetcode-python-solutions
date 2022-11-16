@@ -1,0 +1,35 @@
+# https://leetcode.com/problems/shopping-offers/
+
+class Solution:
+    def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+        def backtrack(needs):
+            if needs == [0] * N:
+                return 0
+            
+            if tuple(needs) in seen:
+                return seen[tuple(needs)]
+            
+            res = 0
+            
+            for i in range(N):
+                res += needs[i] * price[i]
+                
+                
+            for sp in special:
+                for i in range(N):
+                    needs[i] -= sp[i]
+                    
+                if all(needs[i] >= 0 for i in range(N)):
+                    res = min(res, backtrack(needs[:]) + sp[-1])
+                
+                for i in range(N):
+                    needs[i] += sp[i]
+                    
+            seen[tuple(needs)] = res
+            
+            return res
+        
+        N = len(needs)
+        seen = dict()
+        
+        return backtrack(needs)
