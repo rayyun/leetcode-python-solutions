@@ -1,0 +1,32 @@
+# https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/
+
+# O(n log n) / O(1)
+class Solution:
+    def shipWithinDays(self, weights: List[int], days: int) -> int:
+        def is_within_days(capacity):
+            day = 1
+            total_weight = 0
+            
+            for weight in weights:
+                total_weight += weight
+                if total_weight > capacity:
+                    total_weight = weight
+                    day += 1
+                    
+                    if day > days:
+                        return False
+                    
+            return True
+        
+        
+        left, right = max(weights), sum(weights)
+        
+        while left < right:
+            mid = left + (right - left) // 2
+            
+            if is_within_days(mid):
+                right = mid
+            else:
+                left = mid + 1
+        
+        return right
