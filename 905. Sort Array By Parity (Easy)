@@ -1,0 +1,20 @@
+# https://leetcode.com/problems/sort-array-by-parity/
+
+# O(n) / O(1)
+class Solution:
+    def sortArrayByParity(self, nums: List[int]) -> List[int]:
+        even_index, odd_index = 0, len(nums) - 1
+        
+        while even_index < odd_index:
+            while even_index < odd_index and nums[even_index] % 2 == 0:
+                even_index += 1
+            
+            while even_index < odd_index and nums[odd_index] % 2 == 1:
+                odd_index -= 1
+                
+            nums[even_index], nums[odd_index] = nums[odd_index], nums[even_index]
+            
+            even_index += 1
+            odd_index -= 1
+            
+        return nums
