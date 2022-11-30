@@ -3,7 +3,7 @@
 # O(n log n) / O(1)
 class Solution:
     def shipWithinDays(self, weights: List[int], days: int) -> int:
-        def is_within_days(capacity):
+        def is_possible(capacity):
             day = 1
             total_weight = 0
             
@@ -24,7 +24,7 @@ class Solution:
         while left < right:
             mid = left + (right - left) // 2
             
-            if is_within_days(mid):
+            if is_possible(mid):
                 right = mid
             else:
                 left = mid + 1
