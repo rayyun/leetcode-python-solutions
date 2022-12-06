@@ -1,0 +1,16 @@
+# https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/description/
+
+# O(n) / O(1)
+class Solution:
+    def maxScore(self, cardPoints: List[int], k: int) -> int:
+        left, right = k - 1, len(cardPoints) - 1
+        max_score = curr_score = sum(cardPoints[:k])
+
+        for _ in range(k):
+            curr_score += cardPoints[right] - cardPoints[left]
+            max_score = max(max_score, curr_score)
+
+            right -= 1
+            left -= 1
+        
+        return max_score
