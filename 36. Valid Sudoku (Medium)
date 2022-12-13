@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/valid-sudoku/
+
+# O(n^2) / O(n^2)
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        N = len(board)
+
+        rows = [set() for _ in range(N)]
+        cols = [set() for _ in range(N)]
+        boxes = [set() for _ in range(N)]
+
+        for r in range(N):
+            for c in range(N):
+                num = board[r][c]
+                box_idx = (r // 3) * 3 + c // 3
+
+                if num == '.':
+                    continue
+                    
+                if num in rows[r] or num in cols[c] or num in boxes[box_idx]:
+                    return False
+                
+                rows[r].add(num)
+                cols[c].add(num)
+                boxes[box_idx].add(num)
+        
+        return True
