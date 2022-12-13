@@ -1,0 +1,11 @@
+# https://leetcode.com/problems/unique-number-of-occurrences/
+
+# O(n) / O(n)
+from collections import Counter
+
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        count = Counter(arr)
+        values = set(count.values())
+
+        return len(count) == len(values)
