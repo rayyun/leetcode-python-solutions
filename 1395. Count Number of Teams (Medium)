@@ -1,0 +1,28 @@
+# https://leetcode.com/problems/count-number-of-teams/
+
+# O(n^2) / O(1)
+class Solution:
+    def numTeams(self, rating: List[int]) -> int:
+        N = len(rating)
+        res = 0
+
+        for j in range(1, N - 1):
+            num = rating[j]
+            lo_left, hi_right = 0, 0
+            hi_left, lo_right = 0, 0
+
+            for i in range(j):
+                if rating[i] < num:
+                    lo_left += 1
+                else:
+                    hi_left += 1
+            
+            for k in range(j+1, N):
+                if rating[k] < num:
+                    lo_right += 1
+                else:
+                    hi_right += 1
+            
+            res += lo_left * hi_right + hi_left * lo_right
+
+        return res
