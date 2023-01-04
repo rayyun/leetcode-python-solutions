@@ -1,4 +1,6 @@
 # https://leetcode.com/problems/simple-bank-system/
+
+# Solution 1
 # O(1) / O(n)
 class Bank:
 
@@ -37,3 +39,40 @@ class Bank:
 
     def isValid(self, account):
         return account <= self.accounts
+
+
+# Solution 2
+# O(1) / O(n)
+class Bank:
+
+    def __init__(self, balance: List[int]):
+        self.balance = [0] + balance
+        self.accounts = len(self.balance) - 1
+
+    def transfer(self, account1: int, account2: int, money: int) -> bool:
+        if self.withdraw(account1, money):
+            if self.deposit(account2, money):
+                return True
+            else:
+                self.deposit(account1, money)
+                return False
+        else:
+            return False
+
+    def deposit(self, account: int, money: int) -> bool:
+        if not self.isValid(account):
+            return False
+
+        self.balance[account] += money
+        return True
+        
+
+    def withdraw(self, account: int, money: int) -> bool:
+        if not self.isValid(account):
+            return False
+
+        if self.balance[account] < money:
+            return False
+        else:
+            self.balance[account] -= money
+            return True
