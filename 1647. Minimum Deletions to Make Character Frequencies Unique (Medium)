@@ -1,0 +1,98 @@
+# https://leetcode.com/problems/minimum-deletions-to-make-character-frequencies-unique/
+
+# Solution 1 - Counter + set
+# O(n + k^2) / O(k) -  k : distinct characters in s
+from collections import Counter
+
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        frequency = Counter(s)
+
+        seen = set()
+        delete_count = 0
+
+        for char in frequency:
+            while frequency[char] > 0 and frequency[char] in seen:
+                frequency[char] -= 1
+                delete_count += 1
+            
+            seen.add(frequency[char])
+
+        return delete_count
+
+
+        
+# Solution 2 - list + set
+# O(n + k^2) / O(k)
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        frequency = [0] * 26
+
+        for c in s:
+            frequency[ord(c) - ord('a')] += 1
+        
+        delete_count = 0
+        seen = set()
+
+        for i in range(26):
+            while frequency[i] > 0 and frequency[i] in seen:
+                frequency[i] -= 1
+                delete_count += 1
+            
+            seen.add(frequency[i])
+        
+        return delete_count
+        
+        
+        
+# Solution 3 - Sort
+# O(n + k log k) / O(k)
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        frequency = [0] * 26
+
+        for c in s:
+            frequency[ord(c) - ord('a')] += 1
+        
+        frequency.sort(reverse=True)
+
+        delete_count = 0
+        max_allowed_freq = len(s)
+
+        for freq in frequency:
+            if freq > max_allowed_freq:
+                delete_count += (freq - max_allowed_freq)
+                freq = max_allowed_freq
+            
+            max_allowed_freq = max(0, freq - 1)
+        
+        return delete_count
+        
+        
+        
+# Solution 4 - Min Heap
+# O(n + k^2 log k) / O(k)
+import heapq
+
+class Solution:
+    def minDeletions(self, s: str) -> int:
+        frequency = [0] * 26
+
+        for c in s:
+            frequency[ord(c) - ord('a')] += 1
+        
+        min_heap = [-freq for freq in frequency if freq != 0]
+        heapq.heapify(min_heap)
+
+        delete_count = 0
+        while min_heap:
+            top = -heapq.heappop(min_heap)
+
+            if min_heap and top == -min_heap[0]:
+                if top > 1:
+                    top -= 1
+                    heapq.heappush(min_heap, -top)
+                
+                delete_count += 1
+
+        return delete_count
