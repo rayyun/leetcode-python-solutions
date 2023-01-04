@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/count-good-meals/
+
+# O(22 * n) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def countPairs(self, deliciousness: List[int]) -> int:
+        powers = [2**i for i in range(22)]
+        dp_seen = defaultdict(int)
+        count = 0
+
+        for num in deliciousness:
+            for power in powers:
+                if (power - num) in dp_seen:
+                    count += dp_seen[power - num]
+            
+            dp_seen[num] += 1
+        
+        return count % (10**9 + 7)
