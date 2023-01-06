@@ -6,15 +6,15 @@ class Solution:
     def maxIceCream(self, costs: List[int], coins: int) -> int:
         costs.sort()
 
-        N = len(costs)
         icecream = 0
-
-        while icecream < N and costs[icecream] <= coins:
-            coins -= costs[icecream]
+        for cost in costs:
+            if cost > coins:
+                break
+            
             icecream += 1
+            coins -= cost
         
         return icecream
-
 
 
 # Solution 2 - Counting Sort
