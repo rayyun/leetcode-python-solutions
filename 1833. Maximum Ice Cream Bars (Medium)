@@ -1,1 +1,43 @@
 # https://leetcode.com/problems/maximum-ice-cream-bars/
+
+# Solution 1 - Sorting
+# O(n log n) / O(n)
+class Solution:
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        costs.sort()
+
+        N = len(costs)
+        icecream = 0
+
+        while icecream < N and costs[icecream] <= coins:
+            coins -= costs[icecream]
+            icecream += 1
+        
+        return icecream
+
+
+
+# Solution 2 - Counting Sort
+# O(n+m) / O(m)
+class Solution:
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        N = len(costs)
+        M = max(costs)
+        icecream = 0
+
+        cost_count = [0] * (M + 1)
+
+        for cost in costs:
+            cost_count[cost] += 1
+        
+        for cost, count in enumerate(cost_count[1:], 1):
+            if cost > coins:
+                break
+            if count == 0:
+                continue
+            
+            icecream_count = min(count, coins // cost)
+            coins -= cost * icecream_count
+            icecream += icecream_count
+
+        return icecream 
