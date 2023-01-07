@@ -3,17 +3,18 @@
 # O(n) / O(1)
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        if sum(gas) < sum(cost):
+            return -1
+
         N = len(gas)
-        
-        total_tank, curr_tank = 0, 0
-        starting_station = 0
-        
+        curr_gas = 0
+        starting = 0
+
         for i in range(N):
-            total_tank += gas[i] - cost[i]
-            curr_tank += gas[i] - cost[i]
-            
-            if curr_tank < 0:
-                starting_station = i + 1
-                curr_tank = 0
-                
-        return starting_station if total_tank >= 0 else -1
+            curr_gas += gas[i] - cost[i]
+
+            if curr_gas < 0:
+                starting = i + 1
+                curr_gas = 0
+        
+        return starting if curr_gas >= 0 else -1
