@@ -45,6 +45,6 @@ class Solution:
             
             if curr_sum == x:
                 found = True
-                min_length = min(min_length, (N - 1 - right) + left)
+                min_length = min(min_length, (N - (right - left + 1)))
 
         return min_length if found else -1
