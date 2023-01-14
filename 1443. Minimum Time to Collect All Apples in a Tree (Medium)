@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/minimum-time-to-collect-all-apples-in-a-tree/
+
+# O(n) / O(n)
+class Solution:
+    def minTime(self, n: int, edges: List[List[int]], hasApple: List[bool]) -> int:
+        adj = [[] for _ in range(n)]
+        for node1, node2 in edges:
+            adj[node1].append(node2)
+            adj[node2].append(node1)
+
+        def dfs(node, parent):
+            second = 0
+
+            for child in adj[node]:
+                if child != parent:
+                    second += dfs(child, node)
+            
+            if second > 0:
+                return second + 2
+            
+            return 2 if hasApple[node] else 0
+
+        return max(dfs(0, -1) - 2, 0)
