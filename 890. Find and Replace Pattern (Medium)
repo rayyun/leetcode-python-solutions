@@ -1,0 +1,30 @@
+# https://leetcode.com/problems/find-and-replace-pattern/
+
+# O(n*k) / O(n*k) - n: len(words), k: len(pattern)
+from collections import defaultdict
+
+class Solution:
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        res = []
+
+        for word in words:
+            word_dict = defaultdict(list)
+            flag = False
+
+            for idx, (w, p) in enumerate(zip(word, pattern)):
+                w_key = f'w-{w}'
+                p_key = f'p-{p}'
+                
+                word_dict[w_key].append(idx)
+                word_dict[p_key].append(idx)
+
+                if word_dict[w_key] != word_dict[p_key]:
+                    flag = False
+                    break
+                
+                flag = True
+            
+            if flag:
+                res.append(word)
+
+        return res
