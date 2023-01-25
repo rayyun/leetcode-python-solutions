@@ -1,0 +1,30 @@
+# https://leetcode.com/problems/shortest-path-in-binary-matrix
+
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
+        N = len(grid)        
+        dirs = [(0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1)]
+
+        if grid[0][0] or grid[-1][-1]:
+            return -1
+
+        queue = deque([(0, 0, 1)])
+        grid[0][0] = 1
+
+        while queue:
+            r, c, path = queue.popleft()
+
+            if (r, c) == (N-1, N-1):
+                return path
+            
+            for x, y in dirs:
+                nr, nc = r + x, c + y
+
+                if 0 <= nr < N and 0 <= nc < N and grid[nr][nc] == 0:
+                    queue.append((nr, nc, path + 1))
+                    grid[nr][nc] = 1
+        
+        return -1
