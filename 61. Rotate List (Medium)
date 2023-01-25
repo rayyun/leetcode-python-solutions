@@ -3,7 +3,7 @@
 # O(n) / O(1)
 """
 1. In case of k > N, make a linked list cycle and count the nodes
-2. Iterated N - (k%N) - 1 times, fine new_tail
+2. Iterated N - (k%N) - 1 times, find new_tail
 3. new_head = new_tail.next
 4. new_tail.next = None --> disconnect cycle
 4. return new_head
