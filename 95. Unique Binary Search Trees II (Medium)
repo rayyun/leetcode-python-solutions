@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/unique-binary-search-trees-ii/
+
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        def make_trees(start, end):
+            if start > end:
+                return [None]
+
+            all_trees = []
+            for i in range(start, end + 1):
+                left_trees = make_trees(start, i - 1)
+                right_trees = make_trees(i + 1, end)
+
+                for left in left_trees:
+                    for right in right_trees:
+                        curr_tree = TreeNode(i)
+                        curr_tree.left = left
+                        curr_tree.right = right
+                        all_trees.append(curr_tree)
+
+            return all_trees
+
+        return make_trees(1, n)
