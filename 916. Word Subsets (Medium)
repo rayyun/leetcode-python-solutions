@@ -1,0 +1,32 @@
+# https://leetcode.com/problems/word-subsets/
+
+# O(n) / O(n) 
+from collections import Counter, defaultdict
+
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        def compare(w1_hash, w2_hash):
+            for w in w2_hash:
+                if w2_hash[w] > w1_hash[w]:
+                    return False
+
+            return True
+
+        w2_hash = defaultdict(int)
+
+        for w in words2:
+            temp_count = Counter(w)
+
+            for c in temp_count:
+                if temp_count[c] > w2_hash[c]:
+                    w2_hash[c] = temp_count[c]
+
+        res = []
+
+        for word in words1:
+            w_count = Counter(word)
+
+            if compare(w_count, w2_hash):
+                res.append(word)
+        
+        return res
