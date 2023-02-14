@@ -1,16 +1,39 @@
 # https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/
 
+# Solution 1
+# O(n log n) / O(n)
+class Solution:
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        points.sort()
+
+        last_start, last_end = points[0]
+        arrows = 1
+
+        for start, end in points[1:]:
+            if start <= last_end:
+                last_start = max(last_start, start)
+                last_end = min(last_end, end)
+            else:
+                last_start = start
+                last_end = end
+                arrows += 1
+        
+        return arrows
+        
+        
+        
+# Solution 2
 # O(n log n) / O(n)
 class Solution:
     def findMinArrowShots(self, points: List[List[int]]) -> int:
         points.sort(key=lambda x: x[1])
 
-        arrow = 0
-        prev_end = float('-inf')
+        last_end = points[0][1]
+        arrows = 1
 
-        for x_start, x_end in points:
-            if prev_end < x_start:
-                arrow += 1
-                prev_end = x_end
+        for start, end in points[1:]:
+            if last_end < start:
+                arrows += 1
+                last_end = end
         
-        return arrow
+        return arrows
