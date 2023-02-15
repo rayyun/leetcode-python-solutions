@@ -1,0 +1,65 @@
+# https://leetcode.com/problems/increasing-order-search-tree/
+
+# Solution 1 : make inorder value list & create tree
+# O(n) / O(n)
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        def inorder(node):
+            if not node:
+                return []
+
+            return inorder(node.left) + [node.val] + inorder(node.right)
+
+        node_list = inorder(root)
+
+        root = curr = TreeNode(node_list[0])
+
+        for val in node_list[1:]:
+            curr.right = TreeNode(val)
+            curr = curr.right
+        
+        return root
+    
+    
+
+# Solution 2 - Iteration
+# O(n) / O(n)
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return
+
+        curr = root
+        dummy = node = TreeNode()
+        stack = []
+
+        while stack or curr:
+            if curr:
+                stack.append(curr)
+                curr = curr.left
+            else:
+                curr = stack.pop()
+                node.right = TreeNode(curr.val)
+                node = node.right
+                curr = curr.right
+
+        return dummy.right
+        
+        
+        
+# O(n) / O(n)
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        def inOrder(node):
+            if not node:
+                return
+            inOrder(node.left)
+            node.left = None
+            self.curr.right = node
+            self.curr = self.curr.right
+            inOrder(node.right)
+            
+        dummy = self.curr = TreeNode()
+        inOrder(root)
+        
+        return dummy.right
