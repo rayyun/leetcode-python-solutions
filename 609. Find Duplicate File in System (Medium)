@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/find-duplicate-file-in-system/
+
+# O(n * max(len(files))) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def findDuplicate(self, paths: List[str]) -> List[List[str]]:
+        res = []
+        c_dict = defaultdict(list)
+
+        for path in paths:
+            path = path.split()
+
+            dir_path = path[0]
+
+            for f_content in path[1:]:
+                f_content = f_content.split('(')
+                file_name = f_content[0]
+                content = f_content[1][:-1]
+
+                c_dict[content].append(dir_path + '/' + file_name)
+        
+        for content, files in c_dict.items():
+            if len(files) > 1:
+                res.append(files)
+
+        return res
