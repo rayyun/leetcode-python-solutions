@@ -1,0 +1,30 @@
+# https://leetcode.com/problems/basic-calculator-ii/
+
+# O(n) / O(n)
+class Solution:
+    def calculate(self, s: str) -> int:
+        stack = []
+        num, pre_sign = 0, '+'
+
+        for idx, c in enumerate(s):
+            if c.isdigit():
+                num = num * 10 + int(c)
+
+            if c in '+-*/' or idx == len(s) - 1:
+                if pre_sign == '+':
+                    stack.append(num)
+                elif pre_sign == '-':
+                    stack.append(-num)
+                elif pre_sign == '*':
+                    stack.append(stack.pop() * num)
+                elif pre_sign == '/':
+                    prev = stack.pop()
+                    if prev < 0:
+                        stack.append(-(abs(prev) // num))
+                    else:
+                        stack.append(prev // num)
+
+                pre_sign = c
+                num = 0
+                
+        return sum(stack)
