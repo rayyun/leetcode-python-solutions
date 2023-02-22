@@ -1,0 +1,64 @@
+# https://leetcode.com/problems/find-original-array-from-doubled-array/
+
+# Solution 1 - Sort + Hashmap
+# O(n log n) / O(n)
+from collections import Counter
+
+class Solution:
+    def findOriginalArray(self, changed: List[int]) -> List[int]:
+        if len(changed) % 2 == 1:
+            return []
+
+        changed.sort()
+        num_map = Counter(changed)
+        res = []
+
+        for num in num_map:
+            double = num * 2
+            if num_map[num] > 0:               
+                if double in num_map and num_map[num] <= num_map[double]:
+                    if num == 0:
+                        count = num_map[num] // 2
+                    else:
+                        count = num_map[num]
+                    res.extend([num] * count)
+                    num_map[num] -= count
+                    num_map[double] -= count
+                else:
+                    return []
+        
+        return res
+        
+        
+        
+# O(n) / O(n)
+class Solution:
+    def findOriginalArray(self, changed: List[int]) -> List[int]:
+        if len(changed) % 2 == 1:
+            return []
+
+        max_num = max(changed)
+        count_sort = [0] * (max_num + 1)
+        res = []
+
+        for num in changed:
+            count_sort[num] += 1
+        
+        for num, count in enumerate(count_sort):
+            double = num * 2
+
+            if num == 0 and count > 0:
+                if count % 2 == 1:
+                    return []
+                else:
+                    res += [0] * (count // 2)
+            else:
+                if count > 0:
+                    if double <= max_num and count <= count_sort[double]:
+                        res += [num] * count
+                        count_sort[num] -= count
+                        count_sort[double] -= count
+                    else:
+                        return []
+
+        return res
