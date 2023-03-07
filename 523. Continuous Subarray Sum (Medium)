@@ -1,0 +1,20 @@
+# https://leetcode.com/problems/continuous-subarray-sum/
+
+# O(n) / O(k)
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        sum_dict = dict()
+        sum_dict[0] = -1
+        sums = 0
+
+        for idx, num in enumerate(nums):
+            sums += num
+            sums = sums % k
+
+            if sums in sum_dict:
+                if idx - sum_dict[sums] >= 2:
+                    return True
+            else:
+                sum_dict[sums] = idx
+        
+        return False
