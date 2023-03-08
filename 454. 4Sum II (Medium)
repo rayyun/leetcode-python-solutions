@@ -1,0 +1,20 @@
+# https://leetcode.com/problems/4sum-ii/
+
+# O(n^2) / O(n^2)
+from collections import defaultdict
+
+class Solution:
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        two_sum_dict = defaultdict(int)
+        N = len(nums1)
+        res = 0
+
+        for n1 in nums1:
+            for n2 in nums2:
+                two_sum_dict[n1 + n2] += 1
+
+        for n3 in nums3:
+            for n4 in nums4:
+                res += two_sum_dict[-(n3 + n4)]
+        
+        return res
