@@ -1,0 +1,33 @@
+# https://leetcode.com/problems/number-of-matching-subsequences/
+
+# O(n * k) / O(n) - n : len(word), k : len(s)
+class Solution:
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        def is_sub(s, word):
+            stack = list(word)
+            N = len(s)
+
+            for i in range(N-1, -1, -1):
+                if not stack:
+                    return True
+
+                if stack[-1] == s[i]:
+                    stack.pop()
+            
+            return len(stack) == 0
+        
+        seen = dict()
+        count = 0
+
+        for word in words:
+            if word not in seen:
+                if is_sub(s, word):
+                    count += 1
+                    seen[word] = True
+                else:
+                    seen[word] = False
+            else:
+                if seen[word]:
+                    count += 1
+        
+        return count
