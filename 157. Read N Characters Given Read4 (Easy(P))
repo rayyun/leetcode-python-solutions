@@ -1,0 +1,24 @@
+# https://leetcode.com/problems/read-n-characters-given-read4/
+
+# O(n) / O(1)
+class Solution:
+    def read(self, buf, n):
+        """
+        :type buf: Destination buffer (List[str])
+        :type n: Number of characters to read (int)
+        :rtype: The number of actual characters read (int)
+        """
+        buf4 = [''] * 4
+        res = 0
+
+        while res < n:
+            count = read4(buf4)
+
+            if count == 0:
+                break
+
+            count = min(count, n - res)
+            buf[res:] = buf4[:count]
+            res += count
+
+        return res
