@@ -1,0 +1,23 @@
+# https://leetcode.com/problems/two-sum-iii-data-structure-design/
+
+# O(1): add, O(n): find / O(n)
+from collections import defaultdict
+
+class TwoSum:
+
+    def __init__(self):
+        self.nums = defaultdict(int)
+        
+
+    def add(self, number: int) -> None:
+        self.nums[number] += 1
+        
+
+    def find(self, value: int) -> bool:
+        nums = self.nums
+
+        for num in nums:
+            if (value - num) in self.nums and (num != (value - num) or nums[num] > 1):
+                return True
+        
+        return False
