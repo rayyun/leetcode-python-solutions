@@ -1,0 +1,43 @@
+# https://leetcode.com/problems/car-pooling/
+
+# Solution 1 - Make timestamp array and sort
+# O(n log n) / O(n)
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        timestamp = []
+
+        for passenger, fromT, toT in trips:
+            timestamp.append([fromT, passenger])
+            timestamp.append([toT, -passenger])
+        
+        timestamp.sort()
+
+        occupant = 0
+        for time, passenger in timestamp:
+            occupant += passenger
+
+            if occupant > capacity:
+                return False
+        
+        return True
+    
+    
+    
+# Solution 2 - Bucket Sort
+# O(n? 1001?) / O(n? 1001?)
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        time_bucket = [0] * 1001
+
+        for passenger, fromT, toT in trips:
+            time_bucket[fromT] += passenger
+            time_bucket[toT] -= passenger
+        
+        occupant = 0
+        for passenger in time_bucket:
+            occupant += passenger
+
+            if occupant > capacity:
+                return False
+        
+        return True
