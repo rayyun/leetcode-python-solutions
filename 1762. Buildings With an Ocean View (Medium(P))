@@ -1,6 +1,22 @@
 # https://leetcode.com/problems/buildings-with-an-ocean-view/
 
-# Solution 1 - Deque
+# Solution 1 - Linear Iteration
+class Solution:
+    def findBuildings(self, heights: List[int]) -> List[int]:
+        N = len(heights)
+        res = []
+
+        for idx in range(N):
+            while res and heights[res[-1]] <= heights[idx]:
+                res.pop()
+            
+            res.append(idx)
+        
+        return res
+        
+        
+        
+# Solution 2 - from Back(deque)
 # O(n) / O(n)
 from collections import deque
 
@@ -11,17 +27,16 @@ class Solution:
 
         max_height = heights[-1]
 
-        for i, height in enumerate(heights[::-1]):
-            idx = N - i
-            if height > max_height:
+        for idx in range(N, -1, -1):
+            if heights[idx] > max_height:
                 res.appendleft(idx)
-                max_height = height
+                max_height = heights[idx]
 
         return res
-
-
-
-# Solution 2 - List
+        
+        
+        
+# Solution 3 - from Back(list)
 # O(n) / O(n)
 class Solution:
     def findBuildings(self, heights: List[int]) -> List[int]:
@@ -30,10 +45,9 @@ class Solution:
 
         max_height = heights[-1]
 
-        for i, height in enumerate(heights[::-1]):
-            idx = N - i
-            if height > max_height:
+        for idx in range(N, -1, -1):
+            if heights[idx] > max_height:
                 res.append(idx)
-                max_height = height
+                max_height = heights[idx]
 
         return reversed(res)
