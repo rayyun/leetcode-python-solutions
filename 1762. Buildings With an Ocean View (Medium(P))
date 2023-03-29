@@ -1,0 +1,39 @@
+# https://leetcode.com/problems/buildings-with-an-ocean-view/
+
+# Solution 1 - Deque
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def findBuildings(self, heights: List[int]) -> List[int]:
+        N = len(heights) - 1
+        res = deque([N])
+
+        max_height = heights[-1]
+
+        for i, height in enumerate(heights[::-1]):
+            idx = N - i
+            if height > max_height:
+                res.appendleft(idx)
+                max_height = height
+
+        return res
+
+
+
+# Solution 2 - List
+# O(n) / O(n)
+class Solution:
+    def findBuildings(self, heights: List[int]) -> List[int]:
+        N = len(heights) - 1
+        res = [N]
+
+        max_height = heights[-1]
+
+        for i, height in enumerate(heights[::-1]):
+            idx = N - i
+            if height > max_height:
+                res.append(idx)
+                max_height = height
+
+        return reversed(res)
