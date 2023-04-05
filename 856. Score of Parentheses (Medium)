@@ -1,0 +1,61 @@
+# https://leetcode.com/problems/score-of-parentheses/
+
+# Solution 1 - Stack
+# O(n) / O(n)
+class Solution:
+    def scoreOfParentheses(self, s: str) -> int:
+        stack = []
+
+        for c in s:
+            if c == '(':
+                stack.append(0)
+            else:
+                val = stack.pop()
+                if stack:
+                    stack[-1] += max(val * 2, 1)
+                else:
+                    stack.append(max(val * 2, 1))
+        
+        return stack.pop()
+        
+        
+        
+# Solution 2 - Count score on '()'
+# O(n) / O(1)
+class Solution:
+    def scoreOfParentheses(self, s: str) -> int:
+        res, balance = 0, 0
+        
+        for idx, c in enumerate(s):
+            if c == '(':
+                balance += 1
+            else:
+                balance -= 1
+
+                if s[idx - 1] == '(':
+                    res += 1 << balance
+                    # res += 2 ** balance
+        
+        return res 
+        
+        
+        
+# Solution 3 - Divide and Conquer
+# O(n! = n^2) / O(n)
+class Solution:
+    def scoreOfParentheses(self, s: str) -> int:
+        def countScore(i, j):
+            res, balance = 0, 0
+
+            for k in range(i, j):
+                balance += 1 if s[k] == '(' else -1
+
+                if balance == 0:
+                    if k - i == 1:
+                        res += 1
+                    else:
+                        res += 2 * countScore(i + 1, k)
+                    
+                    i = k + 1
+            
+            return res
