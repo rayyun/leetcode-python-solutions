@@ -1,0 +1,38 @@
+# https://leetcode.com/problems/product-of-array-except-self
+
+# O(n) / O(n)
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        N = len(nums)
+        l_prod = [0] * N
+        r_prod = [0] * N
+
+        l_prod[0], r_prod[-1] = 1, 1
+
+        for i in range(N - 1):
+            l_prod[i+1] = l_prod[i] * nums[i]
+        
+        for j in range(N - 1, 0, -1):
+            r_prod[j - 1] = r_prod[j] * nums[j]
+
+        return [num1 * num2 for num1, num2 in zip(l_prod, r_prod)] 
+        
+
+
+# O(n) / O(1)
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        N = len(nums)
+        res = [0] * N
+        prod = 1
+
+        for i in range(N):
+            res[i] = prod
+            prod = prod * nums[i]
+        
+        prod = 1
+        for j in range(N-1, -1, -1):
+            res[j] = res[j] * prod
+            prod = prod * nums[j]
+        
+        return res
