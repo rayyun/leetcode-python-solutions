@@ -1,0 +1,31 @@
+# https://leetcode.com/problems/remove-all-occurrences-of-a-substring
+
+# Solution 1 - String Replace
+# O(m * n) / O(m) - m : len(s), n : len(part)
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        res = ''
+        
+        for c in s:
+            res += c
+            if len(res) >= len(part) and part in res:
+                res = res.replace(part, '')
+            
+        return res
+        
+        
+        
+# Solution 2 - Stack
+# O(m * n) / O(m) - m : len(s), n : len(part)
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        stack = []
+
+        for c in s:
+            stack.append(c)
+
+            if len(stack) >= len(part) and stack[-len(part):] == list(part):
+                for _ in range(len(part)):
+                    stack.pop()
+        
+        return ''.join(stack)
