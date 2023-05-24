@@ -1,0 +1,17 @@
+# https://leetcode.com/problems/brick-wall
+
+# O(m * n) / O(n) - m : number of rows, n : size of row
+from collections import defaultdict
+
+class Solution:
+    def leastBricks(self, wall: List[List[int]]) -> int:
+        brickEndPoint = defaultdict(int)
+
+        for row in wall:
+            endPoint = 0
+
+            for brick in row[:-1]: # 마지막을 빼줘야 오른쪽 edge 를 제외시킬수 있음
+                endPoint += brick
+                brickEndPoint[endPoint] += 1
+
+        return len(wall) - max(list(brickEndPoint.values()) + [0]) # row 에 1 whole brick 만 있는 경우를 대비해 0을 넣어줌
