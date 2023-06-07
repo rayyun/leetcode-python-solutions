@@ -1,0 +1,19 @@
+# https://leetcode.com/problems/rabbits-in-forest/description/
+
+# O(n) / O(n)
+class Solution:
+    def numRabbits(self, answers: List[int]) -> int:
+        seen = dict()
+        count = 0
+
+        for num in answers:
+            if num == 0:
+                count += 1
+            else:
+                if num not in seen or num == seen[num]:
+                    seen[num] = 0
+                    count += num + 1
+                else:
+                    seen[num] += 1
+        
+        return count
