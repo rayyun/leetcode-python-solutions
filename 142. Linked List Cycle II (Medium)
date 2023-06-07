@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/linked-list-cycle-ii/
 
-# Solution 1 - Two pointer
+# Solution 1 - Floyd's Hare and Tortoise algorism - Two pointer
 # O(n) / O(1)
 class Solution:
     def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
