@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/split-array-into-consecutive-subsequences
+
+# O(n) / O(n)
+from collections import Counter, defaultdict
+
+class Solution:
+    def isPossible(self, nums: List[int]) -> bool:
+        left_num = Counter(nums)
+        end_num = defaultdict(int)
+
+        for num in nums:
+            if not left_num[num]:
+                continue
+
+            left_num[num] -= 1
+
+            if end_num[num - 1] > 0:
+                end_num[num - 1] -= 1
+                end_num[num] += 1                
+            elif left_num[num + 1] and left_num[num + 2]:
+                left_num[num + 1] -= 1
+                left_num[num + 2] -= 1
+                end_num[num + 2] += 1
+            else:
+                return False
+        
+        return True
