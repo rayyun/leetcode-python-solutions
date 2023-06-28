@@ -1,67 +1,54 @@
 # https://leetcode.com/problems/top-k-frequent-words/
 
-# Solution 1 - Sort
+# Solution 1 - Brute Force - Counter & Sort
 # O(n log n) / O(n)
 from collections import Counter
 
 class Solution:
     def topKFrequent(self, words: List[str], k: int) -> List[str]:
         word_counter = Counter(words)
+
+        return sorted(word_counter, key=lambda x: (-word_counter[x], x))[:k]    
+
+
         
-        return sorted(word_counter, key=lambda x: (-word_counter[x], x))[:k]
-        
-        
-# Solution 2 - Heap
-# O(n log n) / O(n)
+# Solution 2 - Max Heap
+# O(n + k log n) / O(n)
 from collections import Counter
 import heapq
 
 class Solution:
     def topKFrequent(self, words: List[str], k: int) -> List[str]:
         word_counter = Counter(words)
-        
         heap = [(-count, word) for word, count in word_counter.items()]
         heapq.heapify(heap)
-        
+
         return [heapq.heappop(heap)[1] for _ in range(k)]
 
 
 
-# Solution 3 - Heap (O(n log k))
+# Solution 3 - Min Heap 
 # O(n log k) / O(n)
-from heapq import heapify, heappush, heappop, heappushpop
-from collections import defaultdict
+from collections import Counter
+from heapq import heapify, heappush, heappop
 
 class Item:
-    def __init__(self, word, freq):
+    def __init__(self, count, word):
+        self.count = count
         self.word = word
-        self.freq = freq
-        
-    def __lt__(self, other):
-        if self.freq == other.freq:
-            return self.word > other.word
-        
-        return self.freq < other.freq
-        
 
-class Solution:    
+    def __lt__(self, other):
+        return self.count < other.count or (self.count == other.count and self.word > other.word)
+
+
+class Solution:
     def topKFrequent(self, words: List[str], k: int) -> List[str]:
-        word_freq = defaultdict(lambda:0)       
-        min_heap = []
-        
-        for word in words:
-            word_freq[word] += 1            
-        
-        for word, freq in word_freq.items():
-            item = Item(word, freq)
-            
-            if len(min_heap) < k:
-                heappush(min_heap, item)
-            elif item > min_heap[0]:
-                heappushpop(min_heap, item)
-                
-        res = []
-        while min_heap:
-            res.append(heappop(min_heap).word)
-            
-        return res[::-1]
+        word_counter = Counter(words)
+        heap = []
+
+        for word, count in word_counter.items():
+            heappush(heap, Item(count, word))
+            if len(heap) > k:
+                heappop(heap)
+
+        return [heappop(heap).word for _ in range(k)][::-1]
