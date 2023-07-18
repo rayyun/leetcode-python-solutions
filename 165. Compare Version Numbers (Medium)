@@ -1,0 +1,59 @@
+# https://leetcode.com/problems/compare-version-numbers/
+
+# Solution 1 - Split, Two pass
+# O(max⁡(N,M)) / O(N+M)
+class Solution:
+    def compareVersion(self, version1: str, version2: str) -> int:
+        v1 = version1.split('.')
+        v2 = version2.split('.')
+
+        v1_len = len(v1)
+        v2_len = len(v2)
+
+        for i in range(max(v1_len, v2_len)):
+            n1 = v1[i] if i < v1_len else 0
+            n2 = v2[i] if i < v2_len else 0
+        
+            if int(n1) < int(n2):
+                return -1
+            elif int(n1) > int(n2):
+                return 1
+            
+        return 0
+    
+    
+    
+    
+# Solution 2 - Two pointer
+# O(max⁡(N,M)) / O(max⁡(N,M))
+class Solution:
+    def getNextChunk(self, version: str, p: int, n: int) -> List[int]:
+        if p > n - 1:
+            return 0, p
+        
+        p_end = p
+
+        while p_end < n and version[p_end] != '.':
+            p_end += 1
+
+        num = int(version[p: p_end]) if p_end != n - 1 else int(version[p:n])
+
+        p = p_end + 1
+
+        return num, p
+
+
+    def compareVersion(self, version1: str, version2: str) -> int:
+        p1, p2 = 0, 0
+        n1, n2 = len(version1), len(version2)
+
+        while p1 < n1 or p2 < n2:
+            num1, p1 = self.getNextChunk(version1, p1, n1)
+            num2, p2 = self.getNextChunk(version2, p2, n2)
+
+            if num1 < num2:
+                return -1
+            elif num1 > num2:
+                return 1
+        
+        return 0
