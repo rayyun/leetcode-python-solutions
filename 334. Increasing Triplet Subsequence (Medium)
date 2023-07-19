@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/increasing-triplet-subsequence/
 
-# Solution 1 - TLE
+# Solution 1 - Brute Force - TLE
 # O(n^3) / O(1)
 class Solution:
     def increasingTriplet(self, nums: List[int]) -> bool:
