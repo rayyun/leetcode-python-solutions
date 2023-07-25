@@ -1,0 +1,85 @@
+# https://leetcode.com/problems/shortest-unsorted-continuous-subarray
+
+# Solution 1 - Brute Force - TLE
+# O(n^2) / O(1)
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        min_left, max_right = len(nums), 0
+
+        for i in range(len(nums) - 1):
+            for j in range(i + 1, len(nums)):
+                if nums[j] < nums[i]:
+                    min_left = min(min_left, i)
+                    max_right = max(max_right, j)
+
+        return 0 if min_left > max_right else max_right - min_left + 1
+
+    
+
+# Solution 2 - Sorting
+# O(n log n) / O(n)
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        sorted_nums = sorted(nums)
+        min_left, max_right = len(nums), 0
+
+        for i in range(len(nums)):
+            if nums[i] != sorted_nums[i]:
+                min_left = min(min_left, i)
+                max_right = max(max_right, i)
+        
+        return 0 if min_left > max_right else max_right - min_left + 1
+    
+    
+    
+
+# Solution 3 - Stack
+# O(n) / O(n)
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        stack = []
+        min_left, max_right = len(nums), 0
+
+        for i in range(len(nums)):
+            while stack and nums[stack[-1]] > nums[i]:
+                min_left = min(min_left, stack.pop())
+            
+            stack.append(i)
+        
+        stack = []
+        for i in range(len(nums) - 1, -1, -1):
+            while stack and nums[stack[-1]] < nums[i]:
+                max_right = max(max_right, stack.pop())
+            
+            stack.append(i)
+        
+        return 0 if min_left > max_right else max_right - min_left + 1
+    
+    
+    
+# Solution 4 - Two Pointer
+# O(n) / O(n)
+class Solution:
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+
+        while left < len(nums) - 1 and nums[left] <= nums[left + 1]:
+            left += 1
+
+        while right > 0 and nums[right] >= nums[right - 1]:
+            right -= 1
+
+        if left > right:
+            return 0
+
+        temp_array = nums[left : right + 1]
+        temp_min = min(temp_array)
+        temp_max = max(temp_array)
+
+        while left > 0 and temp_min < nums[left - 1]:
+            left -= 1
+        
+        while right < len(nums) - 1 and temp_max > nums[right + 1]:
+            right += 1
+
+        return 0 if left >= right else right - left + 1 
