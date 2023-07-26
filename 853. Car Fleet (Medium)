@@ -1,0 +1,33 @@
+# https://leetcode.com/problems/car-fleet/
+
+# Solution 1 - Sort & Stack
+# O(n log n) / O(n)
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        pos_speed = sorted(zip(position, speed), reverse=True)
+        stack = []
+
+        for pos, spd in pos_speed:
+            distance = target - pos
+
+            if not stack or distance / spd > stack[-1]:
+                stack.append(distance / spd)
+        
+        return len(stack)
+
+    
+
+# Solution 2 - Sort
+# O(n log n) / O(1)
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        pos_speed = sorted(zip(position, speed), reverse=True)
+        prev_fleet, res = 0, 0
+
+        for pos, spd in pos_speed:
+            distance = target - pos
+            if distance / spd > prev_fleet:
+                res += 1
+                prev_fleet = distance / spd
+            
+        return res
