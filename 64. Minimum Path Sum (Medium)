@@ -1,0 +1,64 @@
+# https://leetcode.com/problems/minimum-path-sum/
+
+# Solution 1 - DP with 2D array
+# O(m * n) / O(m * n)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+        dp = [[0 for _ in range(C)] for _ in range(R)]
+
+        for r in range(R):
+            for c in range(C):
+                if r == 0 and c == 0:
+                    dp[r][c] = grid[r][c]
+                elif r == 0:
+                    dp[r][c] = dp[r][c-1] + grid[r][c]
+                elif c == 0:
+                    dp[r][c] = dp[r-1][c] + grid[r][c]
+                else:
+                    dp[r][c] = min(dp[r][c-1], dp[r-1][c]) + grid[r][c]
+            
+        return dp[-1][-1]
+
+
+
+# Solution 2 - DP with 1D array
+# O(m * n) / O(n)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+        dp = [0 for _ in range(C)]
+
+        for r in range(R):
+            for c in range(C):
+                if r == 0 and c == 0:
+                    dp[c] = grid[r][c]
+                elif r == 0:
+                    dp[c] = dp[c-1] + grid[r][c]
+                elif c == 0:
+                    dp[c] = dp[c] + grid[r][c]
+                else:
+                    dp[c] = min(dp[c-1], dp[c]) + grid[r][c]
+        
+        return dp[-1]
+
+
+
+# Solution 3 - DP with in-place
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        R, C = len(grid), len(grid[0])
+
+        for r in range(R):
+            for c in range(C):
+                if r == 0 and c == 0:
+                    continue
+                
+                if r == 0:
+                    grid[r][c] += grid[r][c-1]
+                elif c == 0:
+                    grid[r][c] += grid[r-1][c]
+                else:
+                    grid[r][c] += min(grid[r][c-1], grid[r-1][c])
+        
+        return grid[-1][-1]
