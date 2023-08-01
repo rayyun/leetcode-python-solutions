@@ -1,0 +1,49 @@
+# https://leetcode.com/problems/n-th-tribonacci-number/
+
+# Solution 1 - DP Top down
+# O(n) / O(n) 
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        def dfs(num):
+            if num in dp:
+                return dp[num]
+                        
+            dp[num] = dfs(num - 3) + dfs(num - 2) + dfs(num - 1)
+            return dp[num]
+
+        dp = {0: 0, 1: 1, 2: 1}
+        
+        return dfs(n)
+
+
+
+# Solution 2 - DP Bottom up
+# O(n) / O(n)
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        dp = [0] * 38
+        dp[0], dp[1], dp[2] = 0, 1, 1
+
+        if n < 3:
+            return dp[n]
+        
+        for i in range(3, n+1):
+            dp[i] = dp[i-3] + dp[i-2] + dp[i-1]
+        
+        return dp[n]
+
+
+
+# Solution 3 - Better DP
+# O(n) / O(1)
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        if n < 3:
+            return 1 if n > 0 else 0
+
+        x, y, z = 0, 1, 1
+
+        for _ in range(n-2):
+            x, y, z = y, z, x + y + z
+        
+        return z
