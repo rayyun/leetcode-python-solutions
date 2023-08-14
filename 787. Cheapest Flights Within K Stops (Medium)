@@ -1,30 +1,29 @@
 # https://leetcode.com/problems/cheapest-flights-within-k-stops/description/
 
 # O(V + E * K) / O(V + E)
-from collections import deque, defaultdict
+from collections import deque
 
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        neighbors = defaultdict(list)
-        min_cost = [float('inf') for _ in range(n)]
-
+        neighbors = [[] for _ in range(n)]
         for from_city, to_city, price in flights:
             neighbors[from_city].append((to_city, price))
 
         queue = deque([(src, 0)])
-        step = 0
+        minCost = [float('inf') for _ in range(n)]
+        stops = 0
 
-        while queue and step <= k:
-            cities_per_step = len(queue)
+        while queue and stops <= k:
+            level = len(queue)
 
-            for _ in range(cities_per_step):
+            for i in range(level):
                 city, cost = queue.popleft()
 
                 for neighbor, price in neighbors[city]:
-                    if cost + price < min_cost[neighbor]:
-                        min_cost[neighbor] = cost + price
-                        queue.append((neighbor, cost + price))
+                    if cost + price < minCost[neighbor]:
+                        minCost[neighbor] = cost + price
+                        queue.append((neighbor, minCost[neighbor]))
             
-            step += 1
-
-        return min_cost[dst] if min_cost[dst] != float('inf') else -1
+            stops += 1
+        
+        return -1 if minCost[dst] == float('inf') else minCost[dst]
