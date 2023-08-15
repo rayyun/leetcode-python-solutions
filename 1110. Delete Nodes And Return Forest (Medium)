@@ -1,0 +1,93 @@
+# https://leetcode.com/problems/delete-nodes-and-return-forest/
+
+# Solution 1 - Recursion
+# O(n) / O(n)
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        delete_set = set(to_delete)
+        res = []
+
+        def checkNode(node, parent):
+            if not node:
+                return None
+            
+            if node.val in delete_set:
+                node.left = checkNode(node.left, None)
+                node.right = checkNode(node.right, None)
+
+                return None
+            else:
+                if not parent:
+                    res.append(node)
+
+                node.left = checkNode(node.left, node)
+                node.right = checkNode(node.right, node)
+
+                return node
+
+        checkNode(root, None)
+
+        return res
+
+
+
+
+# Solution 2 - Recursion 2
+# O(n) / O(h + n)
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        to_delete = set(to_delete)
+        res = []
+
+        def checkNode(root, is_root):
+            if not root:
+                return None
+
+            root_deleted = root.val in to_delete
+
+            if is_root and not root_deleted:
+                res.append(root)
+            
+            root.left = checkNode(root.left, root_deleted)
+            root.right = checkNode(root.right, root_deleted)
+
+            return None if root_deleted else root
+
+        checkNode(root, True)
+
+        return res
+
+
+
+
+# Solution 3 - BFS
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        delete_set = set(to_delete)
+        res = []
+        queue = deque([(root, None)])
+
+        while queue:
+            node, parent = queue.popleft()
+
+            if not parent and node.val not in delete_set:
+                res.append(node)
+            
+            parent = None if node.val in delete_set else node
+
+            if node.left:
+                queue.append((node.left, parent))
+
+                if node.left.val in delete_set:
+                    node.left = None
+            
+            if node.right:
+                queue.append((node.right, parent))
+
+                if node.right.val in delete_set:
+                    node.right = None
+        
+        return res
