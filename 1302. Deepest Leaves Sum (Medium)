@@ -1,26 +1,48 @@
 # https://leetcode.com/problems/deepest-leaves-sum/
 
+# Solution 1 - BFS
 # O(n) / O(n)
 from collections import deque
 
 class Solution:
-    def deepestLeavesSum(self, root: Optional[TreeNode]) -> int:
-        level_sum = 0
-        queue = deque([root])
+    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        # queue.append((node, min_ancestor, max_ancestor))
+        queue = deque([(root, root.val, root.val)])
 
         while queue:
             level_size = len(queue)
-            level_sum = 0
 
             for _ in range(level_size):
-                node = queue.popleft()
-                level_sum += node.val
+                node, min_ancestor, max_ancestor = queue.popleft()
+
+                res = max(res, abs(min_ancestor - node.val), abs(max_ancestor - node.val))
 
                 if node.left:
-                    queue.append(node.left)
+                    queue.append([node.left, min(min_ancestor, node.val), max(max_ancestor, node.val)])
                 
                 if node.right:
-                    queue.append(node.right)
+                    queue.append([node.right, min(min_ancestor, node.val), max(max_ancestor, node.val)])
 
-        
-        return level_sum
+        return res
+
+    
+    
+# Solution 2 - DFS
+# O(n) / O(n)
+class Solution:
+    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+        self.res = 0
+
+        def dfs(node, min_ancestor, max_ancestor):
+            if not node:
+                return
+
+            self.res = max(self.res, abs(min_ancestor - node.val), abs(max_ancestor -  node.val))
+
+            dfs(node.left, min(min_ancestor, node.val), max(max_ancestor, node.val))
+            dfs(node.right, min(min_ancestor, node.val), max(max_ancestor, node.val))
+            
+        dfs(root, root.val, root.val)
+        return self.res
