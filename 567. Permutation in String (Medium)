@@ -1,0 +1,66 @@
+# https://leetcode.com/problems/permutation-in-string/
+
+# Solution 1 - Hashmap
+# O((n-m) * m) / O((n-m) * 24) - n: len(s2), m: len(s1)
+from collections import Counter
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        s1_counter = Counter(s1)
+
+        for i in range(len(s2) - len(s1) + 1):
+            s2_counter = Counter(s2[i: i + len(s1)])
+
+            if s1_counter == s2_counter:
+                return True
+        
+        return False
+  
+
+
+# Solution 2 - Two Pointer   
+# O((n-m) * m) / O((n-m) * 24) - n: len(s2), m: len(s1)
+from collections import Counter
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        s1_len = len(s1)
+        s2_len = len(s2)
+
+        if s1_len > s2_len:
+            return False
+
+        s1_counter = Counter(s1)
+        left, right = 0, s1_len
+
+        while right <= s2_len:
+            if s1_counter == Counter(s2[left:right]):
+                return True
+
+            left += 1
+            right += 1
+        
+        return False
+
+
+
+# Solution 3 - Sliding Window   
+# O(n) / O(1)
+from collections import Counter
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        count = Counter(s1)
+        window_size = len(s1)
+
+        for i in range(len(s2)):
+            if s2[i] in count:
+                count[s2[i]] -= 1
+            
+            if i >= window_size and s2[i - window_size] in count:
+                count[s2[i - window_size]] += 1
+            
+            if all([cnt == 0 for char, cnt in count.items()]):
+                return True
+
+        return False
