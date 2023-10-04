@@ -1,0 +1,31 @@
+# https://leetcode.com/problems/is-graph-bipartite/
+
+# Solution 1 - Union Find
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        def find(x):
+            if root[x] != x:
+                root[x] = find(root[x])
+            
+            return root[x]
+        
+        def union(x, y):
+            rootX = find(x)
+            rootY = find(y)
+
+            if rootX != rootY:
+                root[rootY] = rootX
+
+        def connected(x, y):
+            return find(x) == find(y)
+
+        root = [i for i in range(len(graph))]
+
+        for u in range(len(graph)):
+            for v in range(len(graph[u])):
+                if connected(u, graph[u][v]):
+                    return False
+                
+                union(graph[u][0], graph[u][v])
+        
+        return True
