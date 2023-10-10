@@ -1,31 +1,61 @@
 # https://leetcode.com/problems/path-with-maximum-probability/
 
-# O(n log n + n log K) / O(n) for sort  - K: max(nums) - min(nums)
+# Solution 1 - Dijkstra's Algorithm
+# O(m+n⋅logn) / O(n+m)
+from collections import defaultdict
+import heapq
+
 class Solution:
-    def minimizeMax(self, nums: List[int], p: int) -> int:
-        nums.sort()
-        N = len(nums)
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start_node: int, end_node: int) -> float:
+        graph = defaultdict(list)
 
-        def count_valid_pairs(maximum):
-            idx, count = 0, 0
+        for (from_node, to_node), prob in zip(edges, succProb):
+            graph[from_node].append([to_node, prob])
+            graph[to_node].append([from_node, prob])
 
-            while idx < N - 1:
-                if nums[idx + 1] - nums[idx] <= maximum:
-                    count += 1
-                    idx += 2
-                else:
-                    idx += 1
-            
-            return count
+        max_prob = [0.0 for _ in range(n)]
+        max_prob[start_node] = 1.0
 
-        left, right = 0, nums[-1] - nums[0]
+        max_heap = [(-1.0, start_node)]
 
-        while left < right:
-            mid = left + (right - left) // 2
+        while max_heap:
+            curr_prob, curr_node = heapq.heappop(max_heap)
 
-            if count_valid_pairs(mid) >= p:
-                right = mid
-            else:
-                left = mid + 1
+            if curr_node == end_node:
+                return -curr_prob
+
+            for next_node, path_prob in graph[curr_node]:
+                if -curr_prob * path_prob > max_prob[next_node]:
+                    max_prob[next_node] = -curr_prob * path_prob
+                    heapq.heappush(max_heap, (-max_prob[next_node], next_node))
+
+        return 0.0
+
+
+    
+# Solution 2 - Shortest Path Faster Algorithm    
+# O(n * m) / O(n + m)
+from collections import defaultdict, deque
+
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start_node: int, end_node: int) -> float:
+        graph = defaultdict(list)
+
+        for (from_node, to_node), prob in zip(edges, succProb):
+            graph[from_node].append([to_node, prob])
+            graph[to_node].append([from_node, prob])
+
+        max_prob = [0.0 for _ in range(n)]
+        max_prob[start_node] = 1.0
+
+        queue = deque([start_node])
+
+        while queue:
+            curr_node = queue.popleft()
+
+            for next_node, prob in graph[curr_node]:
+                if max_prob[curr_node] * prob > max_prob[next_node]:
+                    max_prob[next_node] = max_prob[curr_node] * prob
+                    queue.append(next_node)
         
-        return left
+        return max_prob[end_node]
