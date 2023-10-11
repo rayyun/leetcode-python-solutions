@@ -1,7 +1,6 @@
 # https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/
 
 # Solution - Topological Sort
-# O(V+E) / O(V+E)
 from collections import defaultdict, deque
 
 class Solution:
@@ -15,10 +14,11 @@ class Solution:
             indegree[supply] = 0
             queue.append(supply)
 
-        for idx, recipe in enumerate(recipes):
-            for ingredient in ingredients[idx]:
-                adj_list[ingredient].append(recipe)
-                indegree[recipe] += 1
+        for recipe, ing_list in zip(recipes, ingredients):
+            indegree[recipe] = len(ing_list)
+
+            for ing in ing_list:
+                adj_list[ing].append(recipe)
 
         recipes = set(recipes)
 
