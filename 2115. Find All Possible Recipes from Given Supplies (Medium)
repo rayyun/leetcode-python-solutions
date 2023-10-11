@@ -20,6 +20,8 @@ class Solution:
                 adj_list[ingredient].append(recipe)
                 indegree[recipe] += 1
 
+        recipes = set(recipes)
+
         while queue:
             node = queue.popleft()
 
