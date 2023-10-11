@@ -20,6 +20,7 @@ class Solution:
             for ing in ing_list:
                 adj_list[ing].append(recipe)
 
+
         recipes = set(recipes)
 
         while queue:
