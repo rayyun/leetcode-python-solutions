@@ -63,3 +63,59 @@ class Solution:
             fast = nums[fast]
 
         return fast
+
+
+
+# Solution 5 - Bit manipulation + array
+# O(n log n) / O(1) - 10^5 = 2^17, len(base_bit_count, num_bit_count) <= 17
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        N = len(nums) - 1
+        bits = N.bit_length()
+        duplicate = 0
+
+        base_bit_count = [0 for _ in range(bits)]
+        num_bit_count = [0 for _ in range(bits)]
+
+        for bit in range(bits):
+            mask = 1 << bit
+
+            for i in range(N + 1):
+                if i & mask:
+                    base_bit_count[bit] += 1
+                
+                if nums[i] & mask:
+                    num_bit_count[bit] += 1
+                
+        for i in range(bits):
+            if num_bit_count[i] - base_bit_count[i] > 0:
+                duplicate += 2 ** i
+
+        return duplicate
+
+
+    
+# Solution 6 - Bit manipulation
+# O(n log n) / O(1)
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        N = len(nums) - 1
+        bits = N.bit_length()
+        duplicate = 0
+
+        for bit in range(bits):
+            mask = 1 << bit
+            base_bit_count = 0
+            num_bit_count = 0
+
+            for i in range(N + 1):
+                if i & mask:
+                    base_bit_count += 1
+                
+                if nums[i] & mask:
+                    num_bit_count += 1
+                
+            if num_bit_count - base_bit_count > 0:
+                duplicate |= mask
+
+        return duplicate
