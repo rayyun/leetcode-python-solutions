@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/binary-tree-vertical-order-traversal/
 
-# Solution 1 - BFS(level order) & sort
+# Solution 1 - BFS(level order) & sorting
 # O(n + m log m) / O(n) - m : len(col)
 from collections import deque, defaultdict
 
@@ -30,7 +30,7 @@ class Solution:
     
     
 
-# Solution 2 - BFS(level order)    
+# Solution 2 - BFS(level order) without sorting
 # O(n) / O(n)    
 from collections import deque, defaultdict
 
