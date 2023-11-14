@@ -1,27 +1,62 @@
 # https://leetcode.com/problems/binary-tree-vertical-order-traversal/
 
-# Solution 1 - BFS
-# O(n) / O(n)
-from collections import defaultdict, deque
+# Solution 1 - BFS(level order) & sort
+# O(n + m log m) / O(n) - m : len(col)
+from collections import deque, defaultdict
 
 class Solution:
     def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
-            return
-        
-        res = defaultdict(list)
+            return 
+
+        vertical_order = defaultdict(list)
+        queue = deque([(root, 0)])
+
+        while queue:
+            level_length = len(queue)
+
+            for _ in range(level_length):
+                node, col = queue.popleft()
+
+                vertical_order[col].append(node.val)
+
+                if node.left:
+                    queue.append((node.left, col - 1))
+                
+                if node.right:
+                    queue.append((node.right, col + 1))
+
+        return [nodes for col, nodes in sorted(vertical_order.items())]
+    
+    
+
+# Solution 2 - BFS(level order)    
+# O(n) / O(n)    
+from collections import deque, defaultdict
+
+class Solution:
+    def verticalOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return 
+
+        vertical_order = defaultdict(list)
         queue = deque([(root, 0)])
         min_col, max_col = 0, 0
-        
+
         while queue:
-            node, col = queue.popleft()
-            
-            if node:
-                res[col].append(node.val)
+            level_length = len(queue)
+
+            for _ in range(level_length):
+                node, col = queue.popleft()
                 min_col = min(min_col, col)
                 max_col = max(max_col, col)
+
+                vertical_order[col].append(node.val)
+
+                if node.left:
+                    queue.append((node.left, col - 1))
                 
-                queue.append((node.left, col - 1))
-                queue.append((node.right, col + 1))
-            
-        return [res[col] for col in range(min_col, max_col + 1)]
+                if node.right:
+                    queue.append((node.right, col + 1))
+
+        return [vertical_order[col] for col in range(min_col, max_col + 1)]
