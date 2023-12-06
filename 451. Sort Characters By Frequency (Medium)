@@ -59,3 +59,24 @@ class Solution:
                 res.append(char * i)
                 
         return ''.join(res)
+
+
+# Solution 4 - Hashmap & Heap
+# O(n + 48 log 48) / O(n)
+from heapq import *
+from collections import Counter
+
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        s_count = Counter(s)
+        max_heap = [(-count, char) for char, count in s_count.items()]
+        heapify(max_heap)
+
+        res = []
+        while max_heap:
+            count, char = heappop(max_heap)
+            count *= -1
+
+            res.append(count*char)
+        
+        return ''.join(res)
