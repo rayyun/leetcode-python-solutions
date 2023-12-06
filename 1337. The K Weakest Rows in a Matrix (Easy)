@@ -1,0 +1,120 @@
+# https://leetcode.com/problems/the-k-weakest-rows-in-a-matrix/
+
+# Solution 1 - Sorting
+# O(m*n + m log m) / O(m)
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        row_sum = [[sum(row), idx] for idx, row in enumerate(mat)]
+        row_sum.sort()
+
+        return [row_sum[i][1] for i in range(k)]
+    
+    
+    
+# Solution 2 - Min Heap
+# O(m*n + m log m) / O(m)
+import heapq
+
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        row_sum = [[sum(row), idx] for idx, row in enumerate(mat)]
+        min_heap = []
+        heapq.heapify(min_heap)
+
+        for row in row_sum:
+            heapq.heappush(min_heap, row)
+
+        return [heapq.heappop(min_heap)[1] for _ in range(k)]
+
+
+
+# Solution 3 - Vertical Iteration 
+# O(m*n) / O(1)
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        M, N = len(mat), len(mat[0])
+        res = []
+
+        for c in range(N):
+            for r in range(M):
+                if len(res) == k:
+                    break
+
+                if mat[r][c] == 0 and (c == 0 or mat[r][c-1] == 1):
+                    res.append(r)
+
+        r = 0
+        while len(res) < k:
+            if mat[r][-1] == 1:
+                res.append(r)
+            
+            r += 1
+
+        return res
+
+
+    
+# Solution 4 - Binary Search + Sorting
+# O(m log nm = m log n + m log m) / O(m)
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        def binary_search(row):
+            left, right = 0, len(row)
+
+            while left < right:
+                mid = left + (right - left) // 2
+
+                if row[mid] == 1:
+                    left = mid + 1 
+                else:
+                    right = mid
+            
+            return left
+
+        M, N = len(mat), len(mat[0])
+
+        zero_indexes = [[binary_search(row), idx] for idx, row in enumerate(mat)]
+
+        zero_indexes.sort()
+
+        return [zero_indexes[i][1] for i in range(k)]
+                
+
+        
+# Solution 5 - Binary Search + Max Heap
+# O(m log nk = m log n + m log k) / O(k)        
+import heapq
+
+class Solution:
+    def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:
+        def binary_search(row):
+            left, right = 0, len(row)
+
+            while left < right:
+                mid = left + (right - left) // 2
+
+                if row[mid] == 1:
+                    left = mid + 1 
+                else:
+                    right = mid
+            
+            return left
+
+        M, N = len(mat), len(mat[0])
+
+        max_heap = []
+
+        for idx, row in enumerate(mat):
+            zero_index = binary_search(row)
+            heapq.heappush(max_heap, (-zero_index, -idx))
+
+            if len(max_heap) > k:
+                heapq.heappop(max_heap)
+
+        res = []
+
+        while max_heap:
+            zero_index, row_index = heapq.heappop(max_heap)
+            res.append(-row_index)
+
+        return res[::-1]
