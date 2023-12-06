@@ -1,0 +1,31 @@
+# https://leetcode.com/problems/task-scheduler/
+
+# O(tasks * n) / O(tasks)
+from collections import Counter
+from heapq import *
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        counter = Counter(tasks)
+        heap = [(-count, task) for task, count in counter.items()]
+        heapify(heap)
+
+        time = 0
+        while heap:
+            temp_task = []
+
+            for i in range(n+1):
+                if heap:
+                    count, task = heappop(heap)
+                    if -count > 1:
+                        temp_task.append((count+1, task))
+
+                time += 1
+
+                if not heap and not temp_task:
+                    break
+
+            for task in temp_task:
+                heappush(heap, task)
+
+        return time 
