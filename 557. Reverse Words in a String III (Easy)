@@ -1,0 +1,57 @@
+# https://leetcode.com/problems/reverse-words-in-a-string-iii/
+
+# Solution 1 - Split & Reverse
+# O(n) / O(n)
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s_list = s.split()
+
+        return ' '.join([word[::-1] for word in s_list])
+
+
+
+# Solution 2 - Two Pointer(1)
+# O(n) / O(n)
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s = list(s)
+        left, right = 0, 0
+        N = len(s)
+
+        while right < N:
+            if s[right] == ' ' or right == N - 1:
+                l = left
+                r = right - 1 if right < N - 1 else right 
+                while l < r:
+                    s[l], s[r] = s[r], s[l]
+                    l += 1
+                    r -= 1
+                
+                right += 1
+                left = right
+            else:
+                right += 1
+
+        return ''.join(s)
+
+
+
+# Solution 3 - Two Pointer(2)
+# O(n) / O(n)
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        res = ''
+        left, right = 0, 0
+        N = len(s)
+
+        while right < N:
+            if right == N - 1:
+                res += s[left: right + 1][::-1]
+            elif s[right] == ' ':
+                res += s[left: right][::-1]
+                res += ' '
+                left = right + 1
+            
+            right += 1
+
+        return res
