@@ -1,0 +1,33 @@
+# https://leetcode.com/problems/reorganize-string/
+
+# # O(n log k) / O(k)
+from collections import Counter
+import heapq
+
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        res = []
+        s_count = Counter(s)
+        heap = [(-count, char) for char, count in s_count.items()]
+        heapq.heapify(heap)
+
+        while len(heap) > 1:
+            count_first, char_first = heapq.heappop(heap)
+            count_second, char_second = heapq.heappop(heap)
+
+            res.append(char_first)
+            res.append(char_second)
+
+            if count_first != -1:
+                heapq.heappush(heap, (count_first + 1, char_first))
+            
+            if count_second != -1:
+                heapq.heappush(heap, (count_second + 1, char_second))
+        if heap:
+            if heap[0][0] < -1:
+                return ''
+            else:
+                count, char = heapq.heappop(heap)
+                res.append(char)
+        
+        return ''.join(res)
