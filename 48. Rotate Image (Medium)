@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/rotate-image/
 
-# Solution #1. O(n^2) / O(1)
+# Solution 1 - Rotate Groups of Four Cells
+# O(n^2) / O(1)
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
         """
@@ -15,9 +16,30 @@ class Solution:
                 matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j]
                 matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i]
                 matrix[j][n - 1 - i] = temp
-                
+
+
+
+# Solution 2 - Reverse on Diagonal / Reverse Left to Right
+# O(n^2) / O(1)
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        N = len(matrix)
+
+        for r in range(N):
+            for c in range(r, N):
+                matrix[r][c], matrix[c][r] = matrix[c][r], matrix[r][c]
+
+        for r in range(N):
+            for c in range(N // 2):
+                matrix[r][c], matrix[r][N - 1 - c] = matrix[r][N - 1 - c], matrix[r][c]
+
+
     
-# Solution #2. O(n^2) / O(1)
+# Solution 3 - Reverse the rows / Flip Flop - left triangle <-> right triangle
+# O(n^2) / O(1)
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
         """
