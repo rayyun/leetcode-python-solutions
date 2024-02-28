@@ -4,14 +4,33 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         intervals.sort()
-        
-        res = []
-        begin, end = intervals[0][0], intervals[0][1]
-        
+        res = [intervals[0]]
+
         for start, end in intervals:
-            if start <= res[-1][1]:
-                res[-1][1] = max(res[-1][1], end)
-            else:
+            if start > res[-1][1]:
                 res.append([start, end])
-                
+            else:
+                res[-1][1] = max(res[-1][1], end)
+        
         return res
+    
+    
+    
+# O(n log n) / O(n)    
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        res = []
+        start, end = intervals[0]
+
+        for start_i, end_i in intervals:
+            if start_i > end:
+                res.append([start, end])
+                start, end = start_i, end_i
+            else:
+                start = min(start, start_i)
+                end = max(end, end_i)
+
+        res.append((start, end))
+        
+        return res    
