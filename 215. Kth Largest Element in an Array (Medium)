@@ -1,0 +1,64 @@
+# https://leetcode.com/problems/kth-largest-element-in-an-array/
+
+# Solution 1 - Heap
+# O(n log k) / O(k)
+from heapq import heapify, heappush, heappop
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap = []
+        heapify(heap)
+
+        for num in nums:
+            heappush(heap, num)
+
+            if len(heap) > k:
+                heappop(heap)
+        
+        return heap[0]
+
+
+
+# Solution 2 - Quickselect 
+# O(N)on average, O(n^2) in the worst case / O(n)
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        def quick_select(nums, k):
+            pivot = random.choice(nums)
+            large, mid, small = [], [], []
+
+            for num in nums:
+                if num > pivot:
+                    large.append(num)
+                elif num < pivot:
+                    small.append(num)
+                else:
+                    mid.append(num)
+
+            if k <= len(large):
+                return quick_select(large, k)
+
+            if k > len(large) + len(mid):
+                return quick_select(small, k - len(large) - len(mid))
+            
+            return pivot
+        
+        return quick_select(nums, k)
+
+
+
+# Solution 3 - Counting Sort
+# O(n) / O(n) - O(max(nums) - min(nums)) < O(n)
+from collections import Counter
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        count = Counter(nums)
+
+        min_num = min(nums)
+        max_num = max(nums)
+
+        for num in range(max_num, min_num - 1, -1):
+            k -= count[num]
+            if k <= 0:
+                return num
