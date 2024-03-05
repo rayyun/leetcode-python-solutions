@@ -5,30 +5,29 @@
 class Solution:
     def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
         delete_set = set(to_delete)
-        res = []
+        self.res = []
 
-        def checkNode(node, parent):
+        def check_node(node, parent):
             if not node:
                 return None
-            
+
             if node.val in delete_set:
-                node.left = checkNode(node.left, None)
-                node.right = checkNode(node.right, None)
+                check_node(node.left, None)
+                check_node(node.right, None)
 
                 return None
             else:
                 if not parent:
-                    res.append(node)
+                    self.res.append(node)
 
-                node.left = checkNode(node.left, node)
-                node.right = checkNode(node.right, node)
+                node.left = check_node(node.left, node)
+                node.right = check_node(node.right, node)
 
                 return node
 
-        checkNode(root, None)
+        check_node(root, None)
 
-        return res
-
+        return self.res
 
 
 
