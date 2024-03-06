@@ -1,0 +1,89 @@
+# https://leetcode.com/problems/parallel-courses/description/
+
+# Solution 1 - BFS
+# O(N+E) / O(N+E)
+from collections import deque
+
+class Solution:
+    def minimumSemesters(self, n: int, relations: List[List[int]]) -> int:
+        graph = {i: [] for i in range(1, n+1)}
+        in_count = {i: 0 for i in range(1, n+1)}
+
+        for pre_course, next_course in relations: 
+            graph[pre_course].append(next_course)
+            in_count[next_course] += 1
+
+        queue = deque([])
+
+        for course in graph:
+            if in_count[course] == 0:
+                queue.append(course)
+
+        semester = 0
+        master_course = 0
+
+        while queue:
+            semester += 1
+            count = len(queue)
+
+            for _ in range(count):
+                pre_course = queue.popleft()
+                master_course += 1
+                next_courses = graph[pre_course]
+
+                for next_course in next_courses:
+                    in_count[next_course] -= 1
+
+                    if in_count[next_course] == 0:
+                        queue.append(next_course)
+
+        return semester if master_course == n else -1
+
+
+
+# Solution 2 - DFS
+# O(N+E) / O(N+E)
+from collections import deque
+
+class Solution:
+    def minimumSemesters(self, n: int, relations: List[List[int]]) -> int:
+        graph = {i: [] for i in range(1, n+1)}
+
+        for pre_course, next_course in relations:
+            graph[pre_course].append(next_course)
+
+        visited = dict()
+
+        def dfs_check_cycle(node):
+            if node in visited:
+                return visited[node]
+            else:
+                visited[node] = True
+
+            for next_node in graph[node]:
+                if dfs_check_cycle(next_node):
+                    return True
+
+            visited[node] = False
+            return False
+
+        for node in graph.keys():
+            if dfs_check_cycle(node):
+                return -1
+
+        visited_length = dict()
+
+        def dfs_max_path(node):
+            if node in visited_length:
+                return visited_length[node]
+
+            max_length = 1
+            for next_node in graph[node]:
+                length = dfs_max_path(next_node)
+                max_length = max(length + 1, max_length)
+
+            visited_length[node] = max_length
+            
+            return max_length
+
+        return max(dfs_max_path(node) for node in graph.keys())        
