@@ -1,0 +1,54 @@
+# https://leetcode.com/problems/find-and-replace-in-string/description/
+
+# Solution 1 - Dictionary
+# O(n) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
+        res = []
+        idx_dict = defaultdict(list)
+        idx = 0
+
+        for index, source, target in zip(indices, sources, targets):
+            idx_dict[index].append((source, target))
+
+        while idx < len(s):
+            if idx in idx_dict:
+                for source, target in idx_dict[idx]:
+                    char_length = len(source)
+
+                    if s[idx: idx + char_length] == source:
+                        res.append(target)
+                        idx += char_length
+                        break
+
+                else:
+                    res.append(s[idx])
+                    idx += 1
+            else:
+                res.append(s[idx])
+                idx += 1
+
+        return ''.join(res)
+
+
+
+# Solution 2 - Sorted(zip)
+# O(m) / O(n) -  m :len(indices)
+class Solution:
+    def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
+        inputs = sorted(zip(indices, sources, targets))
+        res = ''
+        last_idx = 0
+
+        for idx, source, target in inputs:
+            if s[idx: idx + len(source)] == source:
+                res += s[last_idx: idx]
+                res += target
+                last_idx = idx + len(source)
+
+        if last_idx < len(s):
+            res += s[last_idx:]
+
+        return res
