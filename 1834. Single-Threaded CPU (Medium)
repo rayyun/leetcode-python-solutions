@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/single-threaded-cpu/description/
+
+# O(n log n) / O(n)
+from heapq import heapify, heappush, heappop
+
+class Solution:
+    def getOrder(self, tasks: List[List[int]]) -> List[int]:
+        sorted_tasks = sorted([(task[0], task[1], idx) for idx, task in enumerate(tasks)])
+        res = []
+        idx = 0
+        heap = []
+        currTime = sorted_tasks[0][0]
+
+        while idx < len(sorted_tasks) or heap:
+            while idx < len(sorted_tasks) and sorted_tasks[idx][0] <= currTime:
+                heappush(heap, (sorted_tasks[idx][1], sorted_tasks[idx][2]))
+                idx += 1
+
+            if heap:
+                processTime, index = heappop(heap)
+                res.append(index)
+                currTime += processTime
+            else:
+                if idx < len(sorted_tasks):
+                    currTime = sorted_tasks[idx][0]
+
+        return res
