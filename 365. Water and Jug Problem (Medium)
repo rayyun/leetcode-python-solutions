@@ -1,0 +1,68 @@
+#  https://leetcode.com/problems/water-and-jug-problem/description/
+
+# Solutin 1 - BFS (1)
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def canMeasureWater(self, x: int, y: int, target: int) -> bool:
+        queue = deque([0])
+        seen = set()
+        steps = [x, -x, y, -y]
+
+        while queue:
+            curr = queue.popleft()
+
+            for step in steps:
+                total = curr + step
+
+                if total == target:
+                    return True
+                
+                if total not in seen and 0 <= total <= x + y:
+                    seen.add(total)
+                    queue.append(total)
+
+        return False
+
+
+
+# Solution 2 - BFS (2)
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def canMeasureWater(self, x: int, y: int, target: int) -> bool:
+        if x > y:
+            x, y = y, x
+        
+        if x + y < target:
+            return False
+
+        queue = deque([(0, 0)])
+        visited = set()
+        visited.add((0, 0))
+
+        while queue:
+            part_x, part_y = queue.popleft()
+
+            if part_x + part_y == target:
+                return True
+
+            cases = set()
+
+            cases.add((x, part_y))     # fill jar x
+            cases.add((part_x, y))     # fill jar y
+            cases.add((0, part_y))     # empty jar x
+            cases.add((part_x, y))     # empty jar y
+            cases.add((min(x, part_y + part_x), 0 if part_x + part_y < x else part_y - (x - part_x)))      # pour jar y to x
+            cases.add((0 if part_x + part_y < y else part_x - (y - part_y), min(y, part_x + part_y)))      # pour jar x to y
+
+            for case in cases:
+                if case in visited:
+                    continue
+                    
+                queue.append(case)
+                visited.add(case)
+
+        return False
