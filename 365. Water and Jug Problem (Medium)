@@ -66,3 +66,20 @@ class Solution:
                 visited.add(case)
 
         return False
+
+
+
+# Solution 3 - Math : Using Largest Common Divisior
+# O(n) / O(1)
+class Solution:
+    def canMeasureWater(self, x: int, y: int, target: int) -> bool:
+        def largest_common_divisor(a, b):
+            while b != 0:
+                a, b = b, a % b
+            
+            return a
+
+        if x + y < target:
+            return False    
+
+        return target % largest_common_divisor(x, y) == 0
