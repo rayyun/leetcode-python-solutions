@@ -1,0 +1,48 @@
+# https://leetcode.com/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/description/
+
+# Solution - Union Find
+# O(E + V) / O(V)
+from collections import Counter
+
+class Solution:
+    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+        root = [i for i in range(n)]
+        rank = [1 for _ in range(n)]
+        group = n + 1
+
+        def find(x):
+            if x != root[x]:
+                root[x] = find(root[x])
+            
+            return root[x]
+
+        def union(x, y):
+            nonlocal group
+
+            rootX = find(x)
+            rootY = find(y)
+
+            if rootX != rootY:
+                if rank[rootX] > rank[rootY]:
+                    root[rootY] = rootX
+                elif rank[rootY] > rank[rootX]:
+                    root[rootX] = rootY
+                else:
+                    root[rootY] = rootX
+                    rank[rootX] += 1
+
+                group -= 1
+        
+        for x, y in edges:
+            union(x, y)
+            
+        group_size = Counter([find(x) for x in range(n)]).values()
+
+        res = 0
+        node_nums = n
+
+        for size in group_size:
+            res += (node_nums - size) * size
+            node_nums -= size
+
+        return res
