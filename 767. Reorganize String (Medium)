@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/reorganize-string/
 
-# # O(n log k) / O(k)
+# Solution - Heap
+# O(n log k) / O(k)
 from collections import Counter
 import heapq
 
