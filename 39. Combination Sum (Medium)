@@ -1,6 +1,30 @@
 # https://leetcode.com/problems/combination-sum/
 
-# Solution - Backtracking
+# Solution 1 - Backtracking
+# O(n^(t/m + 1)) / O(t/m) -  n: number of candidates, t: target, m : min(candidates)
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        def backtrack(path, comb_sum, index):
+            if comb_sum == target:
+                res.append(path[:])
+                return
+            
+            if comb_sum > target:
+                return
+
+            for idx in range(index, len(candidates)):
+                path.append(candidates[idx])
+                backtrack(path, comb_sum + candidates[idx], idx)
+                path.pop()
+        
+        res = []
+        backtrack([], 0, 0)
+
+        return res
+
+
+
+# Solution 2 - Backtracking
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         def backtrack(nums, sums, path):
