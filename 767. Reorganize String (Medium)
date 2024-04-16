@@ -1,34 +1,74 @@
 # https://leetcode.com/problems/reorganize-string/
 
-# Solution - Heap
-# O(n log k) / O(k)
+# Solution 1 - Heap
+# # O(n log k) / O(k)
 from collections import Counter
-import heapq
+from heapq import heapify, heappush, heappop
 
 class Solution:
     def reorganizeString(self, s: str) -> str:
-        res = []
         s_count = Counter(s)
+        res = []
+
         heap = [(-count, char) for char, count in s_count.items()]
-        heapq.heapify(heap)
+        heapify(heap)
 
         while len(heap) > 1:
-            count_first, char_first = heapq.heappop(heap)
-            count_second, char_second = heapq.heappop(heap)
+            f_count, f_char = heappop(heap)
+            s_count, s_char = heappop(heap)
 
-            res.append(char_first)
-            res.append(char_second)
+            res.append(f_char)
+            res.append(s_char)
 
-            if count_first != -1:
-                heapq.heappush(heap, (count_first + 1, char_first))
-            
-            if count_second != -1:
-                heapq.heappush(heap, (count_second + 1, char_second))
+            if f_count != -1:
+                heappush(heap, (f_count + 1, f_char))
+
+            if s_count != -1:
+                heappush(heap, (s_count + 1, s_char))
+
         if heap:
             if heap[0][0] < -1:
-                return ''
+                return ""
             else:
-                count, char = heapq.heappop(heap)
+                count, char = heappop(heap)
                 res.append(char)
-        
+
         return ''.join(res)
+
+    
+
+# Solution 2 - Counting & put letter on Odd/Even indices
+# O(n) / O(k)
+from collections import Counter
+
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        s_count = Counter(s)
+        max_count, letter = 0, ''
+
+        for char, count in s_count.items():
+            if count > max_count:
+                max_count = count
+                letter = char
+
+        if max_count > (len(s) + 1) // 2:
+            return ''
+
+        index = 0
+        res = [''] * len(s)
+
+        while s_count[letter] > 0:
+            res[index] = letter
+            index += 2
+            s_count[letter] -= 1
+
+        for char, count in s_count.items():
+            while count > 0:
+                if index >= len(s):
+                    index = 1
+
+                res[index] = char
+                count -= 1
+                index += 2
+
+        return ''.join(res)     
