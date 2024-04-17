@@ -1,0 +1,45 @@
+# https://leetcode.com/problems/largest-submatrix-with-rearrangements/description/
+
+# Solution 1 - Get height and sort by height on each row (modify input)
+# O(m n log n) / O(n)
+class Solution:
+    def largestSubmatrix(self, matrix: List[List[int]]) -> int:
+        R, C = len(matrix), len(matrix[0])
+        res = 0
+
+        for r in range(R):
+            for c in range(C):
+                if matrix[r][c] != 0 and r > 0:
+                    matrix[r][c] += matrix[r-1][c]
+
+            curr_row = sorted(matrix[r], reverse=True)
+            for i in range(C):
+                res = max(res, curr_row[i] * (i + 1))
+
+        return res
+
+
+    
+# Solution 2 - Get height and sort by height on each row (without modifying input)
+# O(m n log n) / O(n)    
+class Solution:
+    def largestSubmatrix(self, matrix: List[List[int]]) -> int:
+        R, C = len(matrix), len(matrix[0])
+        res = 0
+
+        prev_row = [0] * C
+
+        for row in range(R):
+            curr_row = matrix[row]
+
+            for col in range(C):
+                if curr_row[col] != 0:
+                    curr_row[col] += prev_row[col]
+
+            sorted_row = sorted(curr_row, reverse=True)
+            for i in range(C):
+                res = max(res, sorted_row[i] * (i + 1))
+            
+            prev_row = curr_row
+
+        return res
