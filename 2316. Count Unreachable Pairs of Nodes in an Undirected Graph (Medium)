@@ -8,7 +8,7 @@ class Solution:
     def countPairs(self, n: int, edges: List[List[int]]) -> int:
         root = [i for i in range(n)]
         rank = [1 for _ in range(n)]
-        group = n + 1
+        group = n
 
         def find(x):
             if x != root[x]:
