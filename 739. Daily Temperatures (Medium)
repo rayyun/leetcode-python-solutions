@@ -1,16 +1,67 @@
 # https://leetcode.com/problems/daily-temperatures/
 
+# Solution 1 - Stack(1)
 # O(n) / O(n)
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        res = [0] * len(temperatures)
+        N = len(temperatures)
         stack = []
+        res = [0 for _ in range(N)]
+
+        for i in range(N - 1, -1, -1):
+            while stack and temperatures[i] >= stack[-1][0]:
+                stack.pop()
+           
+            if not stack:
+                res[i] = 0
+            else:
+                res[i] = stack[-1][1] - i
+            
+            stack.append((temperatures[i], i))
+        
+        return res
+
+
+
+# Solution 2 - Stack(2)
+# O(n) / O(n)
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        N = len(temperatures)
+        stack = []
+        res = [0] * N
 
         for curr_day, curr_temp in enumerate(temperatures):
-            while stack and temperatures[stack[-1]] < curr_temp:
-                prev_day = stack.pop()
+            while stack and stack[-1][1] < curr_temp:
+                prev_day, prev_temp = stack.pop()
                 res[prev_day] = curr_day - prev_day
+            
+            stack.append((curr_day, curr_temp))
 
-            stack.append(curr_day)
+        return res
+
+
+
+# Solution 3 - Array, Optimized Space
+# O(n) / O(1)
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        N = len(temperatures)
+        res = [0] * N
+        hottest = 0
+
+        for curr_day in range(N - 1, -1, -1):
+            curr_temp = temperatures[curr_day]
+
+            if curr_temp >= hottest:
+                hottest = curr_temp
+                continue
+
+            days = 1
+
+            while curr_temp >= temperatures[curr_day + days]:
+                days += res[curr_day + days]
+            
+            res[curr_day] = days
         
         return res
