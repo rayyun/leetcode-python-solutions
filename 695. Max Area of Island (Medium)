@@ -6,22 +6,28 @@ class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         R, C = len(grid), len(grid[0])
 
-        max_area = 0
         seen = set()
-
-        def get_area(row, col):
-            if not (0 <= row < R and 0 <= col < C and grid[row][col] == 1 and (row, col) not in seen):
-                return 0
-            
-            seen.add((row, col))
-
-            return (1 + get_area(row - 1, col) + get_area(row + 1, col) + get_area(row, col - 1) + get_area(row, col + 1))
-
+        max_area = 0
+        dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
         for r in range(R):
             for c in range(C):
                 if grid[r][c] == 1 and (r, c) not in seen:
-                    max_area = max(max_area, get_area(r, c))
+                    stack = [(r, c)]
+                    seen.add((r, c))
+                    curr_area = 0
+
+                    while stack:
+                        curr_r, curr_c = stack.pop()
+                        curr_area += 1
+
+                        for x, y in dirs:
+                            next_r, next_c = curr_r + x, curr_c + y
+
+                            if 0 <= next_r < R and 0 <= next_c < C and grid[next_r][next_c] == 1 and (next_r, next_c) not in seen:
+                                stack.append((next_r, next_c))
+                                seen.add((next_r, next_c))
+                    max_area = max(max_area, curr_area)        
 
         return max_area
 
