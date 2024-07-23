@@ -1,5 +1,6 @@
 # https://leetcode.com/problems/simplify-path/
 
+# Solution 1 - Stack, str.split()
 # O(n) / O(n)
 class Solution:
     def simplifyPath(self, path: str) -> str:
@@ -14,4 +15,27 @@ class Solution:
             elif p not in ('.', ''):
                 stack.append(p)
         
+        return '/' + '/'.join(stack)
+
+
+# Solution 2 - Stack, str.find()
+# O(n) / O(n)
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        stack = []
+
+        while path:
+            pos = path.find('/')
+
+            if pos >= 0:
+                tmp, path = path[:pos], path[pos+1:]
+            else:
+                tmp, path = path, ''
+
+            if tmp == '..':
+                if stack:
+                    stack.pop()
+            elif tmp not in ('.', ''):
+                stack.append(tmp)
+
         return '/' + '/'.join(stack)
