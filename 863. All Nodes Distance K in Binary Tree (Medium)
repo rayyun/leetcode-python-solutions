@@ -1,51 +1,92 @@
 # https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
 
+# Solution 1 - parent dict & BFS
 # O(n) / O(n)
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
 from collections import deque
 
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        parents = dict()
+        parent_dict = dict()
 
-        def getParents(node, parent):
-            nonlocal parents
-            
+        def makeParentDict(node, parent):
             if not node:
-                return 
+                return
+
+            parent_dict[node] = parent
+
+            if node.left:
+                makeParentDict(node.left, node)
             
-            parents[node.val] = parent
-            getParents(node.left, node)
-            getParents(node.right, node)
-            
+            if node.right:
+                makeParentDict(node.right, node)
+
         
-        def bfs(start):
-            res = []
-            queue = deque([(start, 0)])
-            visited = set()
-            
-            while queue:
-                node, distance = queue.popleft()
-                
-                if node not in visited:
-                    if distance == k:
-                        res.append(node.val)
-                    visited.add(node)
+        makeParentDict(root, None)
+        visited = set()
+        queue = deque([(target, 0)])
+        res = []
+
+        while queue:
+            node, distance = queue.popleft()
+
+            if node not in visited:
+                visited.add(node)
+
+                if distance == k:
+                    res.append(node.val)
+                    continue
                     
-                    if node.left:
-                        queue.append([node.left, distance + 1])
-                    if node.right:
-                        queue.append([node.right, distance + 1])
-                    if parents[node.val]:
-                        queue.append([parents[node.val], distance + 1])
-                        
-            return res
-                        
-                        
-        getParents(root, None)
-        return bfs(target)
+                if node.left:
+                    queue.append((node.left, distance + 1))
+
+                if node.right:
+                    queue.append((node.right, distance + 1))
+
+                if parent_dict[node]:
+                    queue.append((parent_dict[node], distance + 1))
+        
+        return res
+    
+    
+    
+# Solution 2 - Graph & DFS
+# O(n) / O(n)
+from collections import defaultdict
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        graph = defaultdict(list)
+
+        def makeGraph(node):
+            if not node:
+                return
+
+            if node.left:
+                graph[node].append(node.left)
+                graph[node.left].append(node)
+                makeGraph(node.left)
+            
+            if node.right:
+                graph[node].append(node.right)
+                graph[node.right].append(node)
+                makeGraph(node.right)
+            
+        makeGraph(root)
+        visited = set()
+        res = []
+
+        def dfs(node, distance):
+            if node not in visited:
+                visited.add(node)
+
+                if distance == 0:
+                    res.append(node.val)
+                    return
+
+                for adj_node in graph[node]:
+                    if adj_node not in visited:
+                        dfs(adj_node, distance - 1)
+
+        dfs(target, k)
+
+        return res
