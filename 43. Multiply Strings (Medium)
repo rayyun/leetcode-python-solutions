@@ -1,0 +1,22 @@
+# https://leetcode.com/problems/multiply-strings/description/
+
+# O(n*m) / O(n+m)
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        res = [0] * (len(num1) + len(num2))
+
+        for i in range(len(num1) - 1, -1, -1):
+            carry = 0
+
+            for j in range(len(num2) - 1, -1, -1):
+                prod_num = (ord(num1[i]) - ord('0')) * (ord(num2[j]) - ord('0')) + carry
+                carry = (res[i + j + 1] + prod_num) // 10
+                num = (res[i + j + 1] + prod_num) % 10
+
+                res[i + j + 1] = num
+
+            res[i] += carry
+
+        res_str = ''.join(map(str, res))
+
+        return res_str.lstrip('0') if len(res_str.lstrip('0')) > 0 else '0'
