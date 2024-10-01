@@ -1,0 +1,45 @@
+# https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/description/
+
+# Solution - Dummy & Extra Space
+# O(n) / O(n)
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        repeated = set()
+        dummy = prev = ListNode()
+        
+        curr = head
+
+        while curr:
+            if curr.next and curr.val == curr.next.val:
+                repeated.add(curr.val)
+            else:
+                if curr.val not in repeated:
+                    prev.next = ListNode(curr.val)
+                    prev = prev.next
+
+            curr = curr.next
+
+        return dummy.next
+
+
+
+# Solution 2 - Dummy & no space
+# O(n) / O(1)
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = prev = ListNode()
+        curr = head
+
+        while curr:
+            if curr.next and curr.val == curr.next.val:
+                while curr.next and curr.val == curr.next.val:
+                    curr = curr.next
+
+                prev.next = curr.next
+            else:
+                prev.next = curr
+                prev = prev.next
+            
+            curr = curr.next
+
+        return dummy.next
