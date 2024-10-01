@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/merge-k-sorted-lists/
 
-# Solution 1 - Brute Force
+# Solution 1-1 - Brute Force
 # O(n log n) / O(n) - n : number of all ListNodes
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
@@ -20,6 +20,30 @@ class Solution:
             curr.next = node
             curr = curr.next
             
+        return dummy.next
+
+
+
+# Solution 1-2 - Brute Force
+# O(n log n) / O(n) - n : number of all ListNodes
+from collections import defaultdict
+
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        count_dict = defaultdict(int)
+
+        dummy = prev = ListNode()
+
+        for head in lists:
+            while head:
+                count_dict[head.val] += 1
+                head = head.next
+
+        for num in sorted(count_dict.keys()):
+            for _ in range(count_dict[num]):
+                prev.next = ListNode(num)
+                prev = prev.next
+
         return dummy.next
         
         
@@ -57,6 +81,7 @@ class Solution:
         right = self.mergeKLists(lists[mid:])
         
         return mergeTwo(left, right)
+
 
 
 # Solution 3 - Heap
