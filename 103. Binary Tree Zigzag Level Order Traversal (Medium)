@@ -1,6 +1,44 @@
 # https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 
-# Solution - BFS
+# Solution 1 - BFS (1)
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+
+        queue = deque([root])
+        level = 1
+        res = []
+
+        while queue:
+            level_size = len(queue)
+            level_nodes = []
+
+            for _ in range(level_size):
+                node = queue.popleft()
+                level_nodes.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+
+                if node.right:
+                    queue.append(node.right)
+
+            if level > 0:
+                res.append(level_nodes)
+            else:
+                res.append(level_nodes[::-1])
+            
+            level *= -1
+        
+        return res
+
+
+
+# Solution 2 - BFS (2)
 # O(n) / O(n)
 from collections import deque
 
@@ -34,3 +72,34 @@ class Solution:
             left_order = not left_order
             
         return res
+
+
+
+# Solution 3 - DFS
+# O(n) / O(n)
+from collections import deque
+
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        def dfs(node, level):
+            if level >= len(res):
+                res.append(deque([node.val]))
+            else:
+                if level % 2 == 0:
+                    res[level].append(node.val)
+                else:
+                    res[level].appendleft(node.val)
+            
+            if node.left:
+                dfs(node.left, level + 1)
+            if node.right:
+                dfs(node.right, level + 1)
+            
+
+        if not root:
+            return []
+
+        res = []
+        dfs(root, 0)
+
+        return [list(level_nodes) for level_nodes in res]
