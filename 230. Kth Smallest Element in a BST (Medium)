@@ -1,0 +1,36 @@
+# https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/
+
+# Solution 1 - Inorder Recursion
+# O(n) / O(n)
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        def inorder(node):
+            if not node:
+                return []
+
+            return inorder(node.left) + [node.val] + inorder(node.right)
+        
+        return inorder(root)[k-1]
+
+
+    
+# Solution 2 - Inorder Iteration
+# O(H + k) / O(H) - H: tree height
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        stack = []
+        count = 0
+        node = root
+
+        while node or stack:
+            while node:
+                stack.append(node)
+                node = node.left
+
+            node = stack.pop()
+            count += 1
+
+            if count == k:
+                return node.val
+
+            node = node.right
