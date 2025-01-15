@@ -1,0 +1,34 @@
+# https://leetcode.com/problems/check-if-a-parentheses-string-can-be-valid/description/
+
+# Solution 1 - Stack
+# O(n) / O(n)
+class Solution:
+    def canBeValid(self, s: str, locked: str) -> bool:
+        if len(s) % 2 != 0:
+            return False
+
+        opening = []
+        unlocked = []
+
+        for i in range(len(s)):
+            if locked[i] == '0':
+                unlocked.append(i)
+            elif s[i] == '(':
+                opening.append(i)
+            elif s[i] == ')':
+                if opening:
+                    opening.pop()
+                elif unlocked:
+                    unlocked.pop()
+                else:
+                    return False
+        
+
+        while opening and unlocked and unlocked[-1] > opening[-1]:
+            unlocked.pop()
+            opening.pop()
+        
+        if opening:
+            return False
+
+        return True
