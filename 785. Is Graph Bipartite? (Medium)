@@ -33,7 +33,8 @@ class Solution:
 
 
 # Solution 2 - DFS
-# 2 color : 1 / -1
+# coloring by DFS - 2 color : 1 / -1
+# O(n+e) / O(n) : e - number of edges
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
         color = dict()
