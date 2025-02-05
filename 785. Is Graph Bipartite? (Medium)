@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/is-graph-bipartite/
 
 # Solution 1 - Union Find
+# O(E*logN) / O(N)
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
         def find(x):
