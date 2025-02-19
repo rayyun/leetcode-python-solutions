@@ -1,0 +1,36 @@
+# https://leetcode.com/problems/word-search/
+
+# Solution - Backtracking
+# O(N⋅3^L) / O(L) - N: number of cells in the board, L: length of word
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def backtrack(row, col, word):
+            if len(word) == 0:
+                return True
+            
+            if row < 0 or row >= R or col < 0 or col >= C or board[row][col] != word[0]:
+                return False
+
+            temp = board[row][col]
+            board[row][col] = '#'
+
+            for i, j in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                new_row = row + i
+                new_col = col + j
+
+                if backtrack(new_row, new_col, word[1:]):
+                    return True
+            
+            board[row][col] = temp
+
+            return False
+
+
+        R, C = len(board), len(board[0])
+
+        for i in range(R):
+            for j in range(C):
+                if backtrack(i, j, word):
+                    return True
+
+        return False
