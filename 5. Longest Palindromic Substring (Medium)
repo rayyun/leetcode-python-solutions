@@ -1,0 +1,89 @@
+# https://leetcode.com/problems/longest-palindromic-substring
+
+# Solution 1 - Brute Force
+# O(n^3) / O(1)
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def palindrome_check(i, j):
+            left = i
+            right = j - 1
+
+            while left < right:
+                if s[left] != s[right]:
+                    return False
+                
+                left += 1
+                right -= 1
+            
+            return True
+
+        for length in range(len(s), 0, -1):
+            for start in range(len(s) - length + 1):
+                if palindrome_check(start, start + length):
+                    return s[start : start + length]
+
+        return ""
+
+
+
+# Solution 2 - DP
+# O(n^2) / O(n^2)
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        res = [0, 0]
+        max_length = 1
+
+        for i in range(n):
+            dp[i][i] = True
+
+        for i in range(n-1):
+            if s[i] == s[i+1]:
+                dp[i][i+1] = True
+                res = [i, i+1]
+
+        for length in range(2, n):
+            for start in range(n - length):
+                end = start + length
+
+                if s[start] == s[end] and dp[start + 1][end - 1]:
+                    dp[start][end] = True
+
+                    if max_length < end - start + 1:
+                        max_length = end - start + 1
+                        res = [start, end]
+
+        start, end = res
+
+        return s[start : end + 1]
+
+
+
+# Solution 3 - Expand from centers
+# O(n^2) / O(1)
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def findPalindrome(s, left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+            
+            return s[left + 1: right]
+
+        max_length = 0
+        res = ""
+
+        for i in range(len(s)):
+            odd = findPalindrome(s, i, i)
+            even = findPalindrome(s, i, i+1)
+
+            max_length = max(max_length, len(odd), len(even))
+
+            if max_length == len(odd):
+                res = odd
+            
+            if max_length == len(even):
+                res = even
+
+        return res
