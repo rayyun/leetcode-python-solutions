@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/maximum-score-after-splitting-a-string/description/
+
+# Solution 1 - Count left zeros and right ones (using Counter)
+# O(n) / O(1)
+from collections import Counter
+
+class Solution:
+    def maxScore(self, s: str) -> int:
+        s_counter = Counter(s)
+        max_sum = 0
+        left_sum, right_sum = 0, s_counter['1']
+
+        for i in range(len(s)):
+            if s[i] == '0':
+                left_sum += 1
+            else:
+                right_sum -= 1
+            
+            max_sum = max(max_sum, left_sum + right_sum)
+
+        return max_sum
+    
+    
+    
+# Solution 2 - Count left zeros and right ones
+# O(n) / O(1)
+class Solution:
+    def maxScore(self, s: str) -> int:
+        s_count = s.count('1')
+        zeros, ones = 0, s_count
+        max_sum = 0
+
+        for i in range(len(s) - 1):
+            if s[i] == '0':
+                zeros += 1
+            else:
+                ones -= 1
+
+            max_sum = max(max_sum, zeros + ones)
+
+        return max_sum
