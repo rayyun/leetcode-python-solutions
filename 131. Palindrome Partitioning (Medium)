@@ -1,0 +1,91 @@
+# https://leetcode.com/problems/palindrome-partitioning/description/
+
+# Solution 1 - Backtracking (slow with sliced string)
+# TC: O(n*2^n) / SC: O(n)
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []
+
+        def is_palindrome(s):
+            return s == s[::-1]
+
+        def backtrack(s, path):
+            if not s:
+                res.append(path[:])
+            
+            for i in range(1, len(s) + 1):
+                if is_palindrome(s[:i]):
+                    path.append(s[:i])
+
+                    backtrack(s[i:], path)
+
+                    path.pop()
+
+
+        backtrack(s, [])
+
+        return res
+
+
+
+# Solution 2 - Backtracking (better with index)
+# TC: O(n*2^n) / SC: O(n)
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []
+
+        def is_palindrome(s, l, r):
+            while l < r:
+                if s[l] != s[r]:
+                    return False
+                
+                l += 1
+                r -= 1
+            
+            return True
+
+
+        def backtrack(idx, path):
+            if idx >= len(s):
+                res.append(path[:])
+                return
+
+            for end_idx in range(idx, len(s)):
+                if is_palindrome(s, idx, end_idx):
+                    path.append(s[idx: end_idx + 1])
+
+                    backtrack(end_idx + 1, path)
+
+                    path.pop()
+
+
+        backtrack(0, [])
+
+        return res
+
+
+
+# Solution 3 - Backtracking with DP
+# TC: O(n*2^n) / SC: O(n)
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        res = []
+        dp = [[False] * len(s) for _ in range(len(s))]
+
+        def backtrack(idx, path):
+            if idx >= len(s):
+                res.append(path[:])
+
+            for end_idx in range(idx, len(s)):
+                if s[idx] == s[end_idx] and ( end_idx - idx <= 2 or dp[idx + 1][end_idx - 1]):
+                    dp[idx][end_idx] = True
+
+                    path.append(s[idx: end_idx + 1])
+
+                    backtrack(end_idx + 1, path)
+
+                    path.pop()
+
+        backtrack(0, [])
+
+        return res
