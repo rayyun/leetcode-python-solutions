@@ -1,0 +1,57 @@
+# https://leetcode.com/problems/3sum/description/
+
+# Solution 1 - Two pointer
+# TC: O(n^2) / SC: O(n)
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        for i in range(len(nums)):
+            if i == 0 or nums[i] != nums[i-1]:
+                lo = i + 1
+                hi = len(nums) - 1
+
+                while lo < hi:
+                    sums = nums[i] + nums[lo] + nums[hi]
+
+                    if sums < 0:
+                        lo += 1
+                    elif sums > 0:
+                        hi -= 1
+                    else:
+                        res.append([nums[i], nums[lo], nums[hi]])
+                        lo += 1
+                        hi -= 1
+                        while lo < hi and nums[lo] == nums[lo - 1]:
+                            lo += 1
+                
+        return res
+
+
+
+# Solution 2 - Hashset
+# TC: O(n^2) / SC: O(n)
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        for i in range(len(nums)):
+            if i == 0 or nums[i] != nums[i-1]:
+                j = i + 1
+                seen = set()
+
+                while j < len(nums):
+                    to_zero = -(nums[i] + nums[j])
+
+                    if to_zero in seen:
+                        res.append([nums[i], nums[j], to_zero])
+
+                        while j < len(nums) - 1 and nums[j] == nums[j+1]:
+                            j += 1
+
+                    seen.add(nums[j])
+                    j += 1
+
+        return res
