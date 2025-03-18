@@ -1,31 +1,30 @@
 # https://leetcode.com/problems/set-matrix-zeroes/
 
-# Solution 1
-# O(m * n) / O(m + n)
+# Solution 1 - O(m + n) space
+# TC: O(m * n) / SC: O(m + n)
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
         Do not return anything, modify matrix in-place instead.
         """
         R, C = len(matrix), len(matrix[0])
-        seen_row = set()
-        seen_col = set()
-        
+        rows, cols = set(), set()
+
         for r in range(R):
             for c in range(C):
                 if matrix[r][c] == 0:
-                    seen_row.add(r)
-                    seen_col.add(c)                    
+                    rows.add(r)
+                    cols.add(c)
         
         for r in range(R):
             for c in range(C):
-                if matrix[r][c] != 0 and (r in seen_row or c in seen_col):
+                if r in rows or c in cols:
                     matrix[r][c] = 0
+
                     
                     
-                    
-# Solution 2 - O(1) space complexity
-# O(m * n) / O(1)
+# Solution 2 - O(1) space
+# TC: O(m * n) / SC: O(1)
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
