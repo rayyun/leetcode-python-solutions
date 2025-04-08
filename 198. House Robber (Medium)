@@ -22,13 +22,17 @@ class Solution:
     def rob(self, nums: List[int]) -> int:
         if len(nums) <= 2:
             return max(nums)
-        
-        t1, t2 = nums[0], max(nums[0], nums[1])
-        
+
+        rob_2_before, rob_1_before = nums[0], max(nums[0], nums[1])
+
         for i in range(2, len(nums)):
-            t1, t2 = t2, max(t2, t1 + nums[i])
-            
-        return t2
+            current = max(rob_1_before, rob_2_before + nums[i])
+
+            rob_2_before = rob_1_before
+            rob_1_before = current
+
+        return rob_1_before
+
 
 
 # Solution 3 - Recursion with memoization
