@@ -29,3 +29,24 @@ class Solution:
             t1, t2 = t2, max(t2, t1 + nums[i])
             
         return t2
+
+
+# Solution 3 - Recursion with memoization
+# O(n) / O(n)
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        def rob_from(idx, nums):
+            if idx >= len(nums):
+                return 0
+
+            if idx in self.visited:
+                return self.visited[idx]
+
+            res = max(rob_from(idx + 1, nums), rob_from(idx + 2, nums) + nums[idx])
+
+            self.visited[idx] = res
+
+            return res
+        
+        self.visited = {}
+        return rob_from(0, nums)
