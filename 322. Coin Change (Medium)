@@ -1,13 +1,43 @@
 # https://leetcode.com/problems/coin-change/
 
+# Solution 1 - Queue & Hash
+# O(S * n^2) / O(n)
+from collections import deque
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        if amount == 0:
+            return 0
+
+        seen = set()
+        queue = deque([[0, 0]])
+
+        while queue:
+            coin_sum, count = queue.popleft()
+
+            for coin in coins:
+                if coin_sum + coin in seen:
+                    continue
+                elif coin_sum + coin == amount:
+                    return count + 1
+                elif coin_sum + coin < amount:
+                    queue.append([coin_sum + coin, count + 1])
+
+                seen.add(coin_sum + coin)
+
+        return -1
+
+
+
+# Solution 2 - DP
 # O(S*n) / O(S) - S: amount, n: len(coins)
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         dp = [float('inf')] * (amount + 1)
         dp[0] = 0
-        
+
         for coin in coins:
             for i in range(coin, amount + 1):
-                dp[i] = min(dp[i], dp[i - coin] + 1)
-                
+                dp[i] = min(dp[i - coin] + 1, dp[i])
+
         return dp[-1] if dp[-1] < float('inf') else -1
