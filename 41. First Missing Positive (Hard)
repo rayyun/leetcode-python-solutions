@@ -1,0 +1,79 @@
+# https://leetcode.com/problems/first-missing-positive/description/
+
+# Solution 1 - Extra space (Boolean array)
+# O(n) / O(n)
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        N = len(nums)
+        seen = [False] * (N + 1)
+
+        for num in nums:
+            if 0 < num <= N:
+                seen[num] = True
+
+        for i in range(1, N+1):
+            if not seen[i]:
+                return i
+        
+        return N + 1
+    
+    
+    
+# Solution 2 - In-Place (index as a hash key)
+# O(n) / O(1)
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        N = len(nums)
+        one_exist = False
+
+        for i in range(N):
+            if nums[i] == 1:
+                one_exist = True
+
+            if nums[i] <= 0 or nums[i] > N:
+                nums[i] = 1
+
+        if not one_exist:
+            return 1
+
+        for i in range(N):
+            num = abs(nums[i])
+
+            if num == N:
+                nums[0] = -abs(nums[0])
+
+            else:
+                nums[num] = -abs(nums[num])
+
+        for i in range(1, N):
+            if nums[i] > 0:
+                return i
+
+        if nums[0] > 0:
+            return N
+
+        return N + 1
+
+
+
+# Solution 3 - Cycle Sort
+# O(n) / O(1)
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        N = len(nums)
+
+        idx = 0
+
+        while idx < N:
+            correct_idx = nums[idx] - 1
+
+            if 0 < nums[idx] <= N and nums[idx] != nums[correct_idx]:
+                nums[idx], nums[correct_idx] = nums[correct_idx], nums[idx]
+            else:
+                idx += 1
+
+        for i in range(N):
+            if nums[i] != i + 1:
+                return i + 1
+
+        return N + 1
