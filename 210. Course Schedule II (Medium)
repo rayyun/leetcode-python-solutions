@@ -1,32 +1,73 @@
 # https://leetcode.com/problems/course-schedule-ii/description/
 
-# Solution - Topological Sort
-# O(V+E) / O(V+E)
-from collections import defaultdict, deque
+# Solution 1 - Topological Sort
+# O(V+E) / O(V+E)   V: number of vertices, E : number of edges
+from collections import deque, defaultdict
 
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         adj_list = defaultdict(list)
-        indegree = defaultdict(int)
-        queue = deque()
+        in_degree = defaultdict(int)
+        queue = deque([])
         res = []
 
-        for course, prereq in prerequisites:
-            adj_list[prereq].append(course)
-            indegree[course] += 1
-        
+        for course, pre_req in prerequisites:
+            adj_list[pre_req].append(course)
+            in_degree[course] += 1
+
         for course in range(numCourses):
-            if course not in indegree:
+            if course not in in_degree:
                 queue.append(course)
 
         while queue:
-            node = queue.popleft()
-            res.append(node)
+            course = queue.popleft()
+            res.append(course)
 
-            for next_node in adj_list[node]:
-                indegree[next_node] -= 1
+            for next_course in adj_list[course]:
+                in_degree[next_course] -= 1
 
-                if indegree[next_node] == 0:
-                    queue.append(next_node)
+                if in_degree[next_course] == 0:
+                    queue.append(next_course)
 
-        return res if len(res) == numCourses else []
+        return res if len(res) == numCourses else []   
+        # if cycle existed, nodes in cycle weren't added to res
+
+
+
+# Solution 2 - DFS
+# O(V+E) / O(V+E)   V: number of vertices, E : number of edges
+from collections import defaultdict
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        course_dict = defaultdict(list)
+        res = []
+
+        for course, pre_req in prerequisites:
+            course_dict[pre_req].append(course)
+
+        visited = [0] * numCourses
+
+        def dfs(curr_course):
+            if visited[curr_course] == -1:  # found cycle
+                return False
+
+            if visited[curr_course] == 1:   # already visited
+                return True
+
+            visited[curr_course] = -1       # for cycle check
+
+            for next_course in course_dict[curr_course]:
+                if not dfs(next_course):
+                    return False            # found cycle
+            
+            visited[curr_course] = 1
+            res.append(curr_course)
+
+            return True
+
+        for course in range(numCourses):
+            if not dfs(course):
+                return []
+
+        return res[::-1]
