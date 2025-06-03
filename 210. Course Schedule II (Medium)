@@ -6,13 +6,14 @@ from collections import deque, defaultdict
 
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        adj_list = defaultdict(list)
+        course_dict = defaultdict(list)
         in_degree = defaultdict(int)
         queue = deque([])
+
         res = []
 
         for course, pre_req in prerequisites:
-            adj_list[pre_req].append(course)
+            course_dict[pre_req].append(course)
             in_degree[course] += 1
 
         for course in range(numCourses):
@@ -23,13 +24,13 @@ class Solution:
             course = queue.popleft()
             res.append(course)
 
-            for next_course in adj_list[course]:
+            for next_course in course_dict[course]:
                 in_degree[next_course] -= 1
 
                 if in_degree[next_course] == 0:
                     queue.append(next_course)
 
-        return res if len(res) == numCourses else []   
+        return res if len(res) == numCourses else [] 
         # if cycle existed, nodes in cycle weren't added to res
 
 
