@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/course-schedule-ii/description/
 
-# Solution 1 - Topological Sort
+# Solution 1 - Topological Sort (Kahn's Algorithm)
 # O(V+E) / O(V+E)   V: number of vertices, E : number of edges
 from collections import deque, defaultdict
 
