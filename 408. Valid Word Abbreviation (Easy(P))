@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/valid-word-abbreviation/description
+
+# O(n) / O(1)
+class Solution:
+    def validWordAbbreviation(self, word: str, abbr: str) -> bool:
+        WL, AL = len(word), len(abbr)
+        p1, p2 = 0, 0
+
+
+        while p1 < WL and p2 < AL:
+            if word[p1] == abbr[p2]:
+                p1 += 1
+                p2 += 1
+            elif abbr[p2] == '0':
+                return False
+            elif abbr[p2].isnumeric():
+                p3 = p2
+                while p3 < AL and abbr[p3].isnumeric():
+                    p3 += 1
+                
+                p1 += int(abbr[p2:p3])
+                p2 = p3
+
+            else:
+                return False
+
+        return p1 == WL and p2 == AL
