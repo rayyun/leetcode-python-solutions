@@ -1,5 +1,6 @@
 # https://leetcode.com/problems/find-pivot-index/
 
+# Solution 1
 # O(n) / O(1)
 class Solution:
     def pivotIndex(self, nums: List[int]) -> int:
@@ -12,4 +13,21 @@ class Solution:
             leftsum += num
             rightsum -= num
             
+        return -1
+
+
+
+# Solution 2
+# O(n) / O(1)
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        sums = sum(nums)
+        part_sum = 0
+
+        for idx, num in enumerate(nums):
+            if part_sum == sums - part_sum - num:
+                return idx
+            else:
+                part_sum += num
+
         return -1
