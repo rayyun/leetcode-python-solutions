@@ -3,19 +3,19 @@
 # O(n) / O(n)
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        s = list(s)
+        s_list = list(s)
         stack = []
-        
-        for i, c in enumerate(s):
+
+        for idx, c in enumerate(s_list):
             if c == '(':
-                stack.append(i)
+                stack.append(idx)
             elif c == ')':
                 if stack:
                     stack.pop()
                 else:
-                    s[i] = ''
-        
+                    s_list[idx] = ''
+
         while stack:
-            s[stack.pop()] = ''
-            
-        return ''.join(s)
+            s_list[stack.pop()] = ''
+
+        return ''.join(s_list)
