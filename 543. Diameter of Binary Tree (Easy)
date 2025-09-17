@@ -1,0 +1,21 @@
+# https://leetcode.com/problems/diameter-of-binary-tree/
+
+# O(n) / O(n)
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        def longestPath(node):
+            if not node:
+                return 0
+
+            left_length = longestPath(node.left)
+            right_length = longestPath(node.right)
+
+            self.diameter = max(self.diameter, left_length + right_length)
+
+            return max(left_length, right_length) + 1
+
+        self.diameter = 0
+
+        longestPath(root)
+
+        return self.diameter
