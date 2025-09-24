@@ -1,31 +1,68 @@
 # https://leetcode.com/problems/longest-common-prefix/
 
-# Solution 1
-# O(n*m) / O(1) - n : len(str), m : len(chars) 
+# Solution 1 - Horizontal Scanning
+# O(n * c) / O(1) - n: len(strs), c: min len(word)
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        if len(strs) == 0:
-            return ""
-        
         prefix = strs[0]
-        
+
         for word in strs[1:]:
-            if len(prefix) > len(word):
-                prefix = prefix[:len(word)]
+            minL = min(len(prefix), len(word))
+
+            if minL == 0 or prefix[0] != word[0]:
+                return ''
+
+            idx = 0
+
+            while 0 <= idx < minL and prefix[idx] == word[idx]:
+                idx += 1
             
-            for i in range(min(len(prefix), len(word))):
-                if prefix[i] != word[i]:
-                    prefix = prefix[:i]
-                    break
-                
+            prefix = prefix[:idx]
+        
         return prefix
+
         
         
-# Solution 2
+# Solution 2 - Vertical Scanning
+# O(n * c) / O(1) - n: len(strs), c: min len(word)
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        if not strs or len(strs) == 0:
+            return ''
+
+        prefix = strs[0]
+
+        for idx, c in enumerate(prefix):
+            for word in strs[1:]:
+                if idx == len(word) or c != word[idx]:
+                    return prefix[:idx]
+
+        return prefix
+
+
+
+# Solution 3 - Vertical Scanning (using zip function)
+# O(n * c) / O(1) - n: len(strs), c: min len(word)
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        prefix = ''
+
+        for word in zip(*strs):
+            if len(set(word)) == 1:
+                prefix += word[0]
+            else:
+                break
+        
+        return prefix
+
+
+
+# Solution 4
 # O(n) / O(1)
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        min_len, max_len = min(strs), max(strs)
+        min_len, max_len = min(strs), max(strs)   
+        # len 로 min, max 아님!!!!  alphabet 으로 min, max 를 해야 제대로 답이 나옴
         
         if min(min_len, max_len) == 0:
             return ""
@@ -36,18 +73,3 @@ class Solution:
                 break
                 
         return min_len
-
-
-# Solution 3 - Vertical scanning
-# O(len(chars)) / O(1)
-class Solution:
-    def longestCommonPrefix(self, strs: List[str]) -> str:
-        prefix = ''
-        
-        for word in zip(*strs):
-            if len(set(word)) == 1:
-                prefix += word[0]
-            else:
-                break
-        
-        return prefix
