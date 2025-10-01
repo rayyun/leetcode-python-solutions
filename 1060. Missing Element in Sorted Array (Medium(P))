@@ -1,0 +1,56 @@
+# https://leetcode.com/problems/missing-element-in-sorted-array
+
+# Solution 1 - Brute Force
+# O(n) / O(n)
+class Solution:
+    def missingElement(self, nums: List[int], k: int) -> int:
+        nums = set(nums)
+
+        left_most = min(nums)
+        right_most = max(nums)
+
+        for num in range(left_most, right_most + 1):
+            if num not in nums:
+                k -= 1
+
+            if k == 0:
+                return num
+
+        if k > 0:
+            return right_most + k
+        
+        
+        
+# Solution 2 - Iteration
+# O(n) / O(1)
+class Solution:
+    def missingElement(self, nums: List[int], k: int) -> int:
+        N = len(nums)
+
+        for i in range(1, N):
+            missed_count = nums[i] - nums[i-1] - 1
+
+            if missed_count >= k:
+                return nums[i-1] + k
+            
+            k -= missed_count
+
+        return nums[N-1] + k
+    
+    
+    
+# Solution 3 - Binary Search
+# O(log n) / O(1)
+class Solution:
+    def missingElement(self, nums: List[int], k: int) -> int:
+        left, right = 0, len(nums) - 1
+
+        while left < right:
+            mid = right - (right - left) // 2
+
+            if (nums[mid] - nums[0]) - mid < k:
+                left = mid
+            else:
+                right = mid - 1
+
+        return nums[0] + k + left
