@@ -1,5 +1,59 @@
 # https://leetcode.com/problems/subsets-ii/
 
+# Solution 1 - Bactrack
+# O(n * 2^n) / O(n)
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        def backtrack(idx, curr):
+            self.res.append(curr[:])
+
+            for i in range(idx, len(nums)):
+                if i > idx and nums[i] == nums[i-1]:
+                    continue
+                else:
+                    curr.append(nums[i])
+
+                    backtrack(i + 1, curr)
+
+                    curr.pop()
+
+        nums.sort()
+        self.res = []
+
+        backtrack(0, [])
+
+        return self.res
+
+
+
+# Solution 2 - Cascading(Iterative)
+# O(n * 2^n) / O(log n)
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        subsets = [[]]
+        subset_length = len(subsets)
+
+        for i in range(len(nums)):
+            start_index = 0
+
+            if i > 0 and nums[i] == nums[i-1]:
+                start_index = subset_length
+
+            subset_length = len(subsets)
+
+            for idx in range(start_index, len(subsets)):
+                curr_subset = subsets[idx][:]
+                # curr_subset = list(subsets[idx])
+                curr_subset.append(nums[i])
+
+                subsets.append(curr_subset)
+
+        return subsets
+
+
+
+# Solution 3 - DFS
 # O(n 2^n) / O(n)
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
