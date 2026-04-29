@@ -7,24 +7,24 @@ from collections import defaultdict
 class Solution:
     def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
         N = len(s)
-        
+
         if N < 3:
             return N
 
+        char_dict = defaultdict(int)
+
         left, right = 0, 0
-        char_index_dict = defaultdict(int)
         max_length = 2
 
         while right < N:
-            char_index_dict[s[right]] = right
+            char_dict[s[right]] = right
 
-            if len(char_index_dict) > 2:
-                del_index = min(char_index_dict.values())
-                del char_index_dict[s[del_index]]
-
+            if len(char_dict) > 2:
+                del_index = min(char_dict.values())
                 left = del_index + 1
-            
+                del char_dict[s[del_index]]
+
             max_length = max(max_length, right - left + 1)
             right += 1
-
+        
         return max_length
