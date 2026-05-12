@@ -1,0 +1,27 @@
+# https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/
+
+# O(n) / O(n)
+class Solution:
+    def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+        max_sum = 0
+        curr_sum = 0
+        left, right = 0, 0
+        num_index = dict()
+
+        while right < len(nums):
+            curr_num = nums[right]
+            last_index = num_index.get(curr_num, -1)
+
+            while left <= last_index or right - left + 1 > k:
+                curr_sum -= nums[left]
+                left += 1
+            
+            num_index[curr_num] = right
+            curr_sum += curr_num
+
+            if right - left + 1 == k:
+                max_sum = max(max_sum, curr_sum)
+
+            right += 1
+
+        return max_sum
