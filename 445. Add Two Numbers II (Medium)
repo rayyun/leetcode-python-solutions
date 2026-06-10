@@ -1,0 +1,150 @@
+# https://leetcode.com/problems/add-two-numbers-ii/description/
+
+# Solution 1 - Reverse Given Linked Lists
+# O(m + n) / O(m + n)
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        def reverseList(head):
+            prev = None
+            curr = head
+
+            while curr:
+                next = curr.next
+                curr.next = prev
+                prev = curr
+                curr = next
+
+            return prev
+
+        r1 = reverseList(l1)
+        r2 = reverseList(l2)
+
+        head = None
+        total_sum = 0
+        carry = 0
+
+        while r1 or r2:            
+            total_sum = carry
+
+            if r1:
+                total_sum += r1.val
+                r1 = r1.next
+
+            if r2:
+                total_sum += r2.val
+                r2 = r2.next
+
+            carry, total_sum = divmod(total_sum, 10)
+
+            curr = ListNode(total_sum)
+            curr.next = head
+            head = curr
+
+        if carry:
+            curr = ListNode(carry)
+            curr.next = head
+            head = curr
+
+        return head
+
+
+
+    
+# Solution 2 - Stack
+# O(m + n) / O(m + n)
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        s1 = []
+        s2 = []
+
+        while l1:
+            s1.append(l1.val)
+            l1 = l1.next
+
+        while l2:
+            s2.append(l2.val)
+            l2 = l2.next
+
+        total_sum = 0
+        carry = 0
+        head = None
+
+        while s1 or s2:
+            total_sum = carry
+
+            if s1:
+                total_sum += s1.pop()
+
+            if s2:
+                total_sum += s2.pop()
+
+            carry, total_sum = divmod(total_sum, 10)
+
+            curr = ListNode(total_sum)
+            curr.next = head
+            head = curr
+
+        if carry:
+            curr = ListNode(carry)
+            curr.next = head
+            head = curr
+
+        return head
+    
+
+
+
+# Solution 3 
+# O(m + n) / O(m + n)
+# input 을 reverse 하지 않고, output 을 만든후(reverse 된 결과) --> carry 계산하면서 다시 reverse     
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        length_1, length_2 = 0, 0
+        curr_1, curr_2 = l1, l2
+
+        while curr_1:
+            length_1 += 1
+            curr_1 = curr_1.next
+        
+        while curr_2:
+            length_2 += 1
+            curr_2 = curr_2.next
+
+        head = None
+        curr_1, curr_2 = l1, l2
+
+        while length_1 > 0 and length_2 > 0:
+            val = 0
+
+            if length_1 >= length_2:
+                val += curr_1.val
+                curr_1 = curr_1.next
+                length_1 -= 1
+
+            if length_1 < length_2:
+                val += curr_2.val
+                curr_2 = curr_2.next
+                length_2 -= 1
+
+            curr = ListNode(val)
+            curr.next = head
+            head = curr
+
+        o_curr, head = head, None
+        carry = 0
+
+        while o_curr:
+            carry, val = divmod(carry + o_curr.val, 10)
+
+            curr = ListNode(val)
+            curr.next = head
+            head = curr
+
+            o_curr = o_curr.next
+
+        if carry:
+            curr = ListNode(carry)
+            curr.next = head
+            head = curr
+
+        return head
